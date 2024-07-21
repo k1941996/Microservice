@@ -10,6 +10,8 @@ import isRequestValidated from '#middlewares/validators/commonError.js';
 
 const authPublicRouter = express.Router();
 
+authPublicRouter.get('/checkadmin', userPublicController.checkAdmin);
+
 authPublicRouter.post(
   '/signup/:type',
   validateSignUpRequest,

@@ -36,8 +36,9 @@ const signUp = async (request, response) => {
 
       if (role === 'admin') {
         try {
-          const newAdmin = new Admin({ adminId: saved_user._id });
-          await newAdmin.save();
+          const newAdmin = new Admin({ userId: saved_user._id });
+          const adminDetails = await newAdmin.save();
+          Admin.findByIdAndUpdate(saved_user._id, { role: adminDetails._id });
         } catch (error) {
           return response
             .status(500)
@@ -45,8 +46,9 @@ const signUp = async (request, response) => {
         }
       } else {
         try {
-          const newCustomer = new Customer({ customerId: saved_user._id });
-          await newCustomer.save();
+          const newCustomer = new Customer({ userId: saved_user._id });
+          const customerDetails = await newCustomer.save();
+          await User.findByIdAndUpdate(saved_user._id, { role: customerDetails._id });
         } catch (error) {
           return response
             .status(500)
@@ -140,5 +142,21 @@ const resetPassword = async (request, response) => {
   }
 };
 
-const UserPublicController = { signUp, login, forgotPassword, resetPassword };
+const checkAdmin = async (request, response) => {
+  const accountid = request.body.accountid;
+  try {
+    const admin = await Admin.findOne({ userId: accountid });
+    if (admin) {
+      return response.status(200).send({ message: 'User is Admin', isAdmin: true });
+    } else {
+      return response.status(401).send({ message: 'Unauthorized' });
+    }
+  } catch (error) {
+    return response
+      .status(500)
+      .send({ message: 'Something went wrong while checking admin' });
+  }
+};
+
+const UserPublicController = { signUp, login, forgotPassword, resetPassword, checkAdmin };
 export default UserPublicController;

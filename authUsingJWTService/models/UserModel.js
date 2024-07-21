@@ -10,6 +10,7 @@ const userSchema = new Schema({
   userName: { type: String, required: true, trim: true, unique: true },
   address: { type: String, required: true, trim: true },
   termsAndConditions: { type: Boolean, required: true, trim: true },
+  role: { type: Schema.Types.ObjectId, ref: 'Admin' || 'Customer' },
 });
 
 const userModel = mongoose.model('User', userSchema);

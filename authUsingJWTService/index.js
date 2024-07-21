@@ -3,8 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import { connectDB } from '#config/dbConfig.js';
 import routes from '#routes/index.js';
-import { createProxyMiddleware } from 'http-proxy-middleware';
-import checkUserAuthenticity from '#middlewares/authMiddleware/authMiddleware.js';
+import gatewayRouter from '#routes/gatewayRoutes.js';
 
 dotenv.config();
 const app = express();
@@ -23,15 +22,7 @@ app.get('/', (req, res) => {
 });
 
 app.use(routes);
-
-const gatewayUrl = {
-  '/cart': 'http://localhost:4000',
-};
-
-for (const route in gatewayUrl) {
-  const target = gatewayUrl[route];
-  app.use(route, checkUserAuthenticity, createProxyMiddleware({ target }));
-}
+app.use(gatewayRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

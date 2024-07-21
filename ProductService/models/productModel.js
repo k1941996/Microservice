@@ -7,6 +7,7 @@ const ProductSchema = new Schema({
   price: { type: Number },
   stock: { type: Number },
   category: { type: String },
+  createdBy: { type: Schema.Types.ObjectId, ref: "User" },
 });
 
 const Product = mongoose.model("Product", ProductSchema);
