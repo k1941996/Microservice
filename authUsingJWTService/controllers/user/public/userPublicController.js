@@ -38,7 +38,7 @@ const signUp = async (request, response) => {
         try {
           const newAdmin = new Admin({ userId: saved_user._id });
           const adminDetails = await newAdmin.save();
-          Admin.findByIdAndUpdate(saved_user._id, { role: adminDetails._id });
+          await User.findByIdAndUpdate(saved_user._id, { role: adminDetails._id });
         } catch (error) {
           return response
             .status(500)
@@ -145,9 +145,12 @@ const resetPassword = async (request, response) => {
 const checkAdmin = async (request, response) => {
   const accountid = request.body.accountid;
   try {
-    const admin = await Admin.findOne({ userId: accountid });
+    const admin = (await Admin.findOne({ userId: accountid })).toObject();
+
     if (admin) {
-      return response.status(200).send({ message: 'User is Admin', isAdmin: true });
+      return response
+        .status(200)
+        .send({ message: 'User is Admin', isAdmin: true, adminId: admin.userId });
     } else {
       return response.status(401).send({ message: 'Unauthorized' });
     }
