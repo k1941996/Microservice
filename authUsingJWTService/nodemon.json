@@ -1,0 +1,6 @@
+{
+  "events": {
+    "restart": "cls && kill-port 8000"
+  },
+  "delay": "1500"
+}

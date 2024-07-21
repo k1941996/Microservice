@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "ProductService"
+		},
+		{
+			"path": "authUsingJWTService"
+		},
+		{
+			"path": "CartService"
+		},
+		{
+			"path": "Design"
+		},
+		{
+			"path": "frontend"
+		}
+	],
+	"settings": {}
+}
