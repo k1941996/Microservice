@@ -1,4 +1,5 @@
-import { check } from 'express-validator';
+import { check, param } from "express-validator";
+import { isValidObjectId } from "mongoose";
 
 const validateCreateProduct = [
   check("name").notEmpty().withMessage("Name is required field").bail(),
@@ -21,4 +22,17 @@ const validateCreateProduct = [
   check("category").notEmpty().withMessage("Category is required field").bail(),
 ];
 
-export { validateCreateProduct };
+const validateUpdateProduct = [
+  param("product_id")
+    .exists()
+    .withMessage("product_id not present.")
+    .bail()
+    .custom(async (product_id) => {
+      console.log(product_id);
+      if (!isValidObjectId(product_id)) {
+        throw new Error("Invalid Product ID Provided.");
+      }
+    }).bail(),
+];
+
+export { validateCreateProduct, validateUpdateProduct };

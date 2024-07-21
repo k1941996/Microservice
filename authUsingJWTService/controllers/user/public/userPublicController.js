@@ -150,7 +150,7 @@ const checkAdmin = async (request, response) => {
     if (admin) {
       return response
         .status(200)
-        .send({ message: 'User is Admin', isAdmin: true, adminId: admin.userId });
+        .send({ message: 'User is Admin', isAdmin: true, adminId: admin._id });
     } else {
       return response.status(401).send({ message: 'Unauthorized' });
     }
