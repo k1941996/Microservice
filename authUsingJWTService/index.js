@@ -25,5 +25,5 @@ app.use(routes);
 app.use(gatewayRouter);
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Gateway service with auth running on http://localhost:${PORT}`);
 });
