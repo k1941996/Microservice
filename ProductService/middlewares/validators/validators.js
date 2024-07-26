@@ -28,7 +28,6 @@ const validateUpdateProduct = [
     .withMessage("product_id not present.")
     .bail()
     .custom(async (product_id) => {
-      console.log(product_id);
       if (!isValidObjectId(product_id)) {
         throw new Error("Invalid Product ID Provided.");
       }

@@ -4,6 +4,7 @@ import userModel from '#models/UserModel.js';
 const checkUserAuthenticity = async (request, response, next) => {
   const { authorization } = request.headers;
   const { accountid } = request.headers;
+  console.log('inside checkUserAuthenticity');
   if (authorization && authorization.startsWith('Bearer') && accountid) {
     try {
       const token = authorization.split(' ')[1];
@@ -18,12 +19,14 @@ const checkUserAuthenticity = async (request, response, next) => {
         response.status(401).send({ message: 'Unauthorized', error: 'Invalid User' });
       }
     } catch (error) {
-      response.status(401).send({ message: 'Unauthorized', error });
+      response
+        .status(401)
+        .send({ message: 'Unauthorized from checkUserAuthenticity line 22 ', error });
     }
   } else {
     response.status(401).send({
       message: 'Unauthorized',
-      error: { message: 'Unauthorized' },
+      error: { message: 'Unauthorized from checkUserAuthenticity' },
     });
   }
 };
