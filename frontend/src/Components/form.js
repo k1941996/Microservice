@@ -4,21 +4,46 @@ import axios from "axios";
 
 export default function Form() {
   const [isLogin, setIsLogin] = useState(true);
+  const [usernameOrEmail, setUsernameOrEmail] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (isLogin) {
-      console.log("Logging in with:", { email, password });
+      console.log("Logging in with:", { username, email, password });
+      axios
+        .post("http://localhost:8000/login", {
+          username,
+          email,
+          password,
+        })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => console.log(err));
     } else {
-      axios.post("http://localhost:8000/signup/admin", {
-        name,
-        email,
-        password,
-      }).then(res=>{console.log(res)}).catch(err=>console.log(err));
-      console.log("Signing up with:", { name, email, password });
+      if (password !== confirmPassword) {
+        setPasswordError("Passwords do not match");
+        return;
+      }
+      setPasswordError("");
+      console.log("Signing up with:", { name, username, email, password });
+      axios
+        .post("http://localhost:8000/signup/admin", {
+          name,
+          username,
+          email,
+          password,
+        })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => console.log(err));
     }
   };
 
@@ -33,54 +58,60 @@ export default function Form() {
           : "Please enter your information"}
       </p>
       <form onSubmit={handleSubmit} className="mt-8">
-        {!isLogin && (
-          <div className="mt-5">
+        {isLogin ? (
+          <FormInput
+            label="Username"
+            placeholder="Enter your username or email"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+        ) : (
+          <>
             <FormInput
-              label={"Name"}
-              placeholder={"Enter your Name"}
+              label="Name"
+              placeholder="Enter your Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
             />
-          </div>
+            <FormInput
+              label="Username"
+              placeholder="Choose a username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+            <FormInput
+              label="Email"
+              placeholder="Enter your email"  
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </>
         )}
-        <div className="mt-5">
-          <label className="text-lg font-medium">Email</label>
-          <input
-            className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
-            placeholder="Enter Your Email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div className="mt-5">
-          <label className="text-lg font-medium">Password</label>
-          <input
-            className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
-            placeholder="Enter Password"
+        <FormInput
+          label="Password"
+          placeholder="Enter Password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        {!isLogin && (
+          <FormInput
+            label="Confirm Password"
+            placeholder="Confirm your password"
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
             required
           />
-        </div>
-        {isLogin && (
-          <div className="mt-8 flex justify-between items-center">
-            <div>
-              <input type="checkbox" id="remember" />
-              <label className="ml-2 font-medium text-base" htmlFor="remember">
-                Remember Me
-              </label>
-            </div>
-            <button
-              type="button"
-              className="font-medium text-base text-violet-500"
-            >
-              Forgot Password
-            </button>
-          </div>
+        )}
+        {passwordError && (
+          <p className="text-red-500 text-sm mt-1">{passwordError}</p>
         )}
         <div className="mt-8 flex flex-col gap-y-4">
           <button
@@ -96,7 +127,10 @@ export default function Form() {
           {isLogin ? "Don't have an account?" : "Already have an account?"}
         </p>
         <button
-          onClick={() => setIsLogin(!isLogin)}
+          onClick={() => {
+            setIsLogin(!isLogin);
+            setPasswordError("");
+          }}
           className="ml-2 font-medium text-base text-violet-500"
         >
           {isLogin ? "Sign up" : "Sign in"}
