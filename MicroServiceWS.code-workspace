@@ -16,5 +16,11 @@
 			"path": "frontend"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"editor.acceptSuggestionOnEnter": "on",
+		"editor.inlineSuggest.suppressSuggestions": true,
+		"editor.suggest.preview": true,
+		"editor.suggest.shareSuggestSelections": false,
+		"prettier.printWidth": 120
+	}
 }

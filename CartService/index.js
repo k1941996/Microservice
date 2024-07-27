@@ -1,7 +1,7 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import { connectDB } from '#config/dbConfig.js';
-import routes from '#routes/index.js';
+import express from "express";
+import dotenv from "dotenv";
+import { connectDB } from "#config/dbConfig.js";
+import cartRouter from "#routes/index.js";
 
 dotenv.config();
 const app = express();
@@ -13,11 +13,11 @@ connectDB(DATABASE_URL);
 
 const PORT = process.env.PORT || 4000;
 
-app.get('/', (_, res) => {
-  res.status(200).send('Hello from cart');
+app.get("/", (_, res) => {
+  res.status(200).send("Hello from cart");
 });
-app.use(routes);
+app.use(cartRouter);
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Cart Service running on http://localhost:${PORT}`);
 });

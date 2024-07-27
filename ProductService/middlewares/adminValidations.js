@@ -31,17 +31,19 @@ export const checkIfCreatedBySameAdmin = async (req, res, next) => {
 
   try {
     const adminDetails = await getAdminDetails(accountid);
-    const product = (await Product.findById(product_id));
-    if (
+    const product = await Product.findById(product_id);
+    if (!product) {
+      return res.status(401).send({ message: "Product not found." });
+    } else if (
+      product &&
       adminDetails.isAdmin &&
       product?.createdBy.toString() === adminDetails.adminId
     ) {
       next();
-    }
-    else {
+    } else {
       return res
-      .status(401)
-      .send({ message: "Unauthorized" });  
+        .status(401)
+        .send({ message: "Unauthorized checkIfCreatedBySameAdmin" });
     }
   } catch (err) {
     return res
