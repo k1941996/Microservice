@@ -1,15 +1,6 @@
 import Cart from "#models/CartModel.js";
-import productService from "#services/ProductService.js";
+import { getProductInfo } from "#api/Product.js";
 
-const getProductInfo = async (product_id) => {
-  try {
-    const product = await productService.get(`/id/${product_id}`);
-    return product?.product;
-  } catch (err) {
-    console.log("Error ", err.response.data.message);
-    return null;
-  }
-};
 
 const addNewProductToCart = async (cart, product_id, quantity, totalPrice) => {
   const updatedProductInfo = [...cart.productInfo, { product_id, quantity: quantity }];
@@ -55,7 +46,8 @@ const CreateNewCart = async (userId, totalPrice, product_id, quantity) => {
 };
 
 export const addProductToCart = async (req, res) => {
-  const { product_id, userId, quantity } = req.body;
+  const { product_id, quantity } = req.body;
+  const userId = req.headers.accountid;
   const product = await getProductInfo(product_id);
   try {
     if (!product) {

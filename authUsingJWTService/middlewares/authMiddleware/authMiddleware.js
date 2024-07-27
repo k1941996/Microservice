@@ -4,7 +4,6 @@ import userModel from '#models/UserModel.js';
 const checkUserAuthenticity = async (request, response, next) => {
   const { authorization } = request.headers;
   const { accountid } = request.headers;
-  console.log('inside checkUserAuthenticity');
   if (authorization && authorization.startsWith('Bearer') && accountid) {
     try {
       const token = authorization.split(' ')[1];

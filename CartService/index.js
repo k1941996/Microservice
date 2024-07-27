@@ -13,9 +13,9 @@ connectDB(DATABASE_URL);
 
 const PORT = process.env.PORT || 4000;
 
-app.get("/", (_, res) => {
-  res.status(200).send("Hello from cart");
-});
+// app.get("/hello", (_, res) => {
+//   res.status(200).send("Hello from cart");
+// });
 app.use(cartRouter);
 
 app.listen(PORT, () => {

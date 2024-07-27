@@ -12,8 +12,7 @@ const gatewayUrls = {
   },
   '/cart': {
     target: 'http://localhost:4000',
-    protectedRoutes: ['/addProduct'],
-    publicRoutes: ['/'],
+    protectedRoutes: ['/addProduct', '/'],
   },
 };
 

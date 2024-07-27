@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 const DATABASE_URL = process.env.DATABASE_URL;
 connectDB(DATABASE_URL);
 
-const PORT = process.env.PORT || 9000;
+const PORT = process.env.PORT || 8000;
 
 app.get('/', (req, res) => {
   res.status(200).send('Hello world');
