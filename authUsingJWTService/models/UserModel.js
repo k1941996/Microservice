@@ -8,7 +8,6 @@ const userSchema = new Schema({
   password: { type: String, required: true, trim: true },
   password_id: { type: String },
   userName: { type: String, required: true, trim: true, unique: true },
-  address: { type: String },
   termsAndConditions: { type: Boolean, required: true, trim: true },
   role: { type: Schema.Types.ObjectId, ref: 'Admin' || 'Customer' },
 });

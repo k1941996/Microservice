@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
 import { generatePassowrdId, generateToken } from '#utils/authUtils.js';
 
 const signUp = async (request, response) => {
-  const { name, userName, termsAndConditions, email, password, address } = request.body;
+  const { name, userName, termsAndConditions, email, password } = request.body;
   const user = await User.findOne({
     $or: [{ userName }, { email: userName }, { email: email }],
   });
@@ -25,7 +25,6 @@ const signUp = async (request, response) => {
         password: hashedPassword,
         termsAndConditions,
         password_id,
-        address,
       });
 
       let saved_user = await newUser.save();

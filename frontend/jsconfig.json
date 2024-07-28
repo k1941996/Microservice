@@ -2,11 +2,13 @@
   "compilerOptions": {
     "skipLibCheck": true,
     "target": "ES6",
-    "module": "CommonJS",
+    "module": "ES6",
     "noEmit": true,
     "downlevelIteration": true,
     "baseUrl": ".",
     "paths": {
+      "$api/*": ["./src/api/*"],
+      "$utils/*": ["./src/utils/*"],
       "$inputComponents/*": ["./src/components/InputComponents/*"],
       "$components/*": ["./src/components/*"],
       "$authComponents/*": ["./src/components/authComponents/*"],
