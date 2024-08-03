@@ -21,7 +21,7 @@ const FormInput = (props) => {
     <div className={className ? className : ""}>
       {label ? (
         <label
-          className={`text-lg font-medium ${
+          className={`text-md font-medium ${error? `text-rose-500`:''} ${
             labelClassName ? labelClassName : ""
           }`}
         >

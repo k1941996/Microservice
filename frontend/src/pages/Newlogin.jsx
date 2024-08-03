@@ -15,10 +15,10 @@ const onSubmit = (values) => {
 const validate = (values) => {
   let errors = {};
 
-  if (!values.email) {
-    errors.email = "Required";
-  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-    errors.email = "Invalid email address";
+  if (!values.userName) {
+    errors.userName = "Required";
+  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.userName)) {
+    errors.userName = "Invalid email address";
   }
 
   if (!values.password) {
@@ -62,42 +62,20 @@ function NewLogin() {
             <h1 className="text-3xl text-center mb-4">Login</h1>
             <p className="text-center text-sm mb-6">
               Don't have an account?{" "}
-              <Link
-                to="/signup/customer"
-                className="text-violet-500 hover:underline"
-              >
+              <Link to="/signup/customer" className="text-violet-500 hover:underline">
                 Sign up Now!
               </Link>
             </p>
 
             <form className="space-y-4" onSubmit={formik.handleSubmit}>
               <div className="form-control flex flex-col">
-                {/* <label htmlFor="email" className="mb-1 font-medium">
-                  Email
-                </label>
-                <input
-                  className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-400"
-                  type="email"
-                  id="email"
-                  name="email"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.email}
-                />
-                {formik.touched.email && formik.errors.email ? (
-                  <div className="error">{formik.errors.email}</div>
-                ) : null} */}
                 <FormInput
                   name="userName"
                   className="py-6"
                   value={formik.values.userName}
                   onChange={formik.handleChange}
                   label="Email/Username:"
-                  error={
-                    formik.touched.userName && formik.errors.userName
-                      ? formik.errors.userName
-                      : null
-                  }
+                  error={formik.touched.userName && formik.errors.userName ? formik.errors.userName : null}
                   onBlur={formik.handleBlur}
                 />
               </div>
