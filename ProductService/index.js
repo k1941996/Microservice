@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 const DATABASE_URL = process.env.DATABASE_URL;
 connectDB(DATABASE_URL);
 
-app.get("/", (req, res) => {
+app.get("/hello", (req, res) => {
   res.status(200).send({ message: "Hello from product service" });
 });
 

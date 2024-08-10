@@ -8,11 +8,16 @@ const gatewayUrls = {
   '/product': {
     target: 'http://localhost:10180',
     protectedRoutes: ['/create', '/update', '/delete'],
-    publicRoutes: ['/all', '/id', '/'],
+    publicRoutes: ['/all', '/id', '/hello'],
   },
   '/cart': {
     target: 'http://localhost:4000',
-    protectedRoutes: ['/addProduct', '/'],
+    protectedRoutes: ['/addProduct', '/hello','/'],
+  },
+  '/order': {
+    target: 'http://localhost:5000',
+    protectedRoutes: ['/placeorder'],
+    publicRoutes: ['/hello'],
   },
 };
 
@@ -26,6 +31,12 @@ const createProxy = (url, routes, isProtected) => {
         pathFilter: routes,
         on: {
           proxyReq: fixRequestBody,
+          error: (err, _, res) => {
+            console.log('Proxy error', err);
+            res
+              .status(500)
+              .send({ message: 'Something went wrong while reaching the server.' });
+          },
         },
       }),
     ].filter(Boolean);
@@ -37,11 +48,6 @@ const createProxy = (url, routes, isProtected) => {
 Object.keys(gatewayUrls).forEach((url) => {
   createProxy(url, gatewayUrls[url].publicRoutes, false);
   createProxy(url, gatewayUrls[url].protectedRoutes, true);
-});
-
-gatewayRouter.use((err, req, res, next) => {
-  console.error('Proxy error:', err);
-  res.status(500).send({ message: 'Something went wrong with the proxy.' });
 });
 
 export default gatewayRouter;

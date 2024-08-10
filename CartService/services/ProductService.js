@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const productService = axios.create({
-  baseURL: "http://localhost:8000/product",
+  baseURL: "http://localhost:10180/",
 });
 
 productService.interceptors.request.use(

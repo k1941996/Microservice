@@ -31,7 +31,7 @@ const signUp = async (request, response) => {
 
       saved_user = saved_user.toObject();
       delete saved_user.password;
-      const token = generateToken({ ...saved_user, password_id, role });
+      const token = generateToken({ ...saved_user, password_id });
 
       if (role === 'admin') {
         try {
@@ -74,9 +74,10 @@ const login = async (request, response) => {
     if (user && isPassowrdCorrect) {
       const password_id = user.password_id;
       const token = generateToken({ ...user, password_id });
-
       delete user.password;
-
+      delete user.password_id;
+      delete user.termsAndConditions;
+      delete user.address;
       response.status(200).send({ data: user, token });
     } else {
       response.status(404).send({ message: 'Invalid username or password' });
@@ -160,5 +161,5 @@ const checkAdmin = async (request, response) => {
   }
 };
 
-const UserPublicController = { signUp, login, forgotPassword, resetPassword, checkAdmin };
+const UserPublicController = { signUp, login, forgotPassword, resetPassword,  checkAdmin };
 export default UserPublicController;

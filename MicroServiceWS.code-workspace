@@ -21,5 +21,10 @@
 	],
 	"settings": {
 		"prettier.printWidth": 120,
+		"javascript.preferences.importModuleSpecifierEnding": "js",
+		"javascript.preferences.importModuleSpecifier": "non-relative",
+		"javascript.experimental.updateImportsOnPaste": true,
+		"typescript.preferences.includePackageJsonAutoImports": "on",
+		"editor.foldingImportsByDefault": true,
 	}
 }

@@ -1,15 +1,17 @@
 import express from 'express';
-
 import userProtectedController from '#controllers/user/protected/userProtectedController.js';
-import isRequestValidated from '#middlewares/validators/commonError.js';
+// import authProtectedRouter from './auth/protectedRoutes.js';
 import { validateUpdatePasswordRequest } from '#middlewares/validators/authValidator.js';
-const authProtectedRouter = express.Router();
+import isRequestValidated from '#middlewares/validators/commonError.js';
 
-authProtectedRouter.patch(
+const protectedRouter = express.Router();
+
+protectedRouter.patch(
   '/updatePassword',
   validateUpdatePasswordRequest,
   isRequestValidated,
   userProtectedController.updateUserPassword,
 );
 
-export default authProtectedRouter;
+
+export default protectedRouter;
