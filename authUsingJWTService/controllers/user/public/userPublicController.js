@@ -94,7 +94,7 @@ const forgotPassword = async (request, response) => {
   if (user) {
     const secret = user._id + process.env.JWT_SECRET_KEY;
     const token = jwt.sign({ userId: user._id }, secret, { expiresIn: '15min' });
-    const link = `http://localhost:4000/api/user/reset/${user._id}/${token}`;
+    const link = `http://localhost:3000/reset/${user._id}/${token}`;
     console.log(link);
     response.status(200).send({
       message: `If a matching account was found, an email was sent to ${
