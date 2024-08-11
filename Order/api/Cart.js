@@ -1,13 +1,25 @@
 import CartService from "#services/CartService.js";
-import axios from "axios";
 
 const getCartInfo = async ({ headers }) => {
   try {
-    const cartInfo = await axios.get("http://localhost:4000/", { headers });
-    return cartInfo;
+    return await CartService.get("/", {
+      headers,
+    });
   } catch (error) {
     console.log(error);
+    return null;
   }
 };
 
-export { getCartInfo };
+const emptyCart = async ({ headers }) => {
+  try {
+    return await CartService.delete("/deleteCart", {
+      headers,
+    });
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+export { getCartInfo, emptyCart };

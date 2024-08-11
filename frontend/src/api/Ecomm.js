@@ -7,7 +7,6 @@ Ecomm.interceptors.request.use(
   (config) => {
     config.headers.Authorization = getToken();
     config.headers.accountid = getAccountId();
-    console.log(config);
     return config;
   },
   (error) => {

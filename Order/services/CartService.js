@@ -1,12 +1,12 @@
 import axios from "axios";
 
 const CartService = axios.create({
-  baseURL: "http://localhost:4000",
+  baseURL: "http://localhost:4000/",
 });
 
 CartService.interceptors.request.use(
   (config) => {
-    console.log(config.headers);
+    delete config.headers["content-length"];
     return config;
   },
   (error) => {

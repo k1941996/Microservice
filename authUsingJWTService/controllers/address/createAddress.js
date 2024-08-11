@@ -10,7 +10,6 @@ const appendAddress = async (id, newAddressInfo) => {
     },
     { new: true },
   );
-  console.log(newAddressList);
   return newAddressList;
 };
 const createNewAddressList = async (userId, newAddressInfo) => {

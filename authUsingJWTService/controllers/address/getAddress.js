@@ -4,7 +4,6 @@ const getAddress = async (req, res) => {
   const { addressId } = req.params;
 
   const acc_id = req.headers.accountid;
-  console.log(acc_id);
   try {
     if (!addressId) {
       const addresses = await AddressesModel.find({ userId: acc_id });
@@ -12,14 +11,19 @@ const getAddress = async (req, res) => {
         .status(200)
         .send({ message: 'Addresses fetched successfully', addresses });
     }
-    const address = await AddressesModel.findOne(
+    let address = await AddressesModel.findOne(
       { userId: acc_id },
       {
         addresses: { $elemMatch: { _id: addressId } },
       },
-    );
+    ).lean();
 
-    return res.status(200).send({ message: 'Address fetched successfully', address });
+    const formattedAddress = { ...address, ...address.addresses[0] };
+    delete formattedAddress.addresses;
+
+    return res
+      .status(200)
+      .send({ message: 'Address fetched successfully', address: formattedAddress });
   } catch (error) {
     console.log(error);
     res.status(500).send('Internal server error');

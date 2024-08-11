@@ -5,6 +5,7 @@ import isRequestValidated from "#validators/validatorErrorHandler.js";
 import { getCart } from "#controllers/getCart.js";
 import { deleteProduct } from "#controllers/deleteProduct.js";
 import { updateProductQty } from "#controllers/updateProductQty.js";
+import { deleteCart } from "#controllers/deleteCart.js";
 
 const cartRouter = express.Router();
 
@@ -14,6 +15,7 @@ cartRouter.get("/", getCart);
 
 cartRouter.delete("/deleteProduct", validateProductId, isRequestValidated, deleteProduct);
 
-cartRouter.put("/updateProductQty",validateAddProduct,isRequestValidated,updateProductQty);
+cartRouter.put("/updateProductQty", validateAddProduct, isRequestValidated, updateProductQty);
+cartRouter.delete("/deleteCart", deleteCart);
 
 export default cartRouter;

@@ -10,7 +10,7 @@ const OrderSchema = mongoose.Schema({
   products: [ProductSchema],
   orderDate: { type: Date, default: Date.now },
   status: { type: String, required: true },
-  shippingAddress: { type: Schema.Types.ObjectId, ref: "Address" },
+  shippingAddress: { type: Object, required: true },
 });
 
 const Order = mongoose.model("Order", OrderSchema);
