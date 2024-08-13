@@ -1,10 +1,11 @@
 import React from "react";
-import { Formik, Field, Form, ErrorMessage } from "formik";
+import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { setAccountId, setToken } from "$utils/tokenUtil";
-import NavBar from "$components/NavBar";
 import { Link, useNavigate } from "react-router-dom";
 import Ecomm from "$api/Ecomm";
+import FormField from "$components/FormField";
+import NavBar from "$components/NavBar";
 
 const Signup = ({ type }) => {
   const navigate = useNavigate();
@@ -30,11 +31,11 @@ const Signup = ({ type }) => {
       .required("Required"),
     termsAndConditions: Yup.boolean()
       .oneOf([true], "You must accept the terms and conditions")
-      .required("Required"),
+      .required("You must accept the terms and conditions"),
   });
 
   const handleSubmit = (values, { setSubmitting }) => {
-    setSubmitting(true)
+    setSubmitting(true);
     const url = `/signup/${type}`;
     Ecomm.post(url, values)
       .then((res) => {
@@ -51,103 +52,82 @@ const Signup = ({ type }) => {
       });
   };
 
+  const fields = [
+    { name: "name", label: "Name", type: "text" },
+    { name: "userName", label: "Username", type: "text" },
+    { name: "email", label: "Email", type: "email" },
+    { name: "password", label: "Password", type: "password" },
+    { name: "confirm_password", label: "Confirm Password", type: "password" },
+  ];
+
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-tr from-violet-100 to-pink-100">
-      <div className="flex-grow flex items-center justify-center px-4 py-8">
-        <div className="w-full max-w-md py-2">
-          <div className="bg-white rounded-3xl border-2 border-gray-200 overflow-hidden shadow-lg">
-            <div className="animated-bg text-white pt-6 pb-2 text-center">
-              <h1 className="text-4xl font-bold">Sign up</h1>
-              <h3 className="text-2xl text-center capitalize mt-4">
+      <div className="flex-grow flex justify-center mt-20">
+        <div className="w-full max-w-md">
+          <div className="bg-gray-50 rounded-xl border border-gray-200 overflow-hidden shadow-lg">
+            <div className="animated-bg text-white pt-4 pb-2 text-center">
+              <h1 className="text-3xl font-bold">Sign up</h1>{" "}
+              <h3 className="text-xl text-center capitalize mt-2">
                 Create {type} Account
               </h3>
-              <p className="text-center text-sm mb-2 py-3">
+              <p className="text-center text-xs mb-2 py-2">
                 Already have an Account?&nbsp;
                 <Link to="/Login" className="text-zinc-900 hover:underline">
                   Login Now!
                 </Link>
               </p>
             </div>
-
+            
             <Formik
               initialValues={initialValues}
               validationSchema={validationSchema}
               onSubmit={handleSubmit}
             >
-              {(formikprops) => {
-                const { isSubmitting, touched, errors }=formikprops;
-                return (
-                <Form className="mt-8 space-y-4 px-6">
-                  {[
-                    "name",
-                    "userName",
-                    "email",
-                    "password",
-                    "confirm_password",
-                  ].map((fieldName) => (
-                    <div key={fieldName} className="form-control flex flex-col">
-                      <label
-                        htmlFor={fieldName}
-                        className="text-base font-semibold"
-                      >
-                        {fieldName.charAt(0).toUpperCase() +
-                          fieldName.slice(1).replace("_", " ")}
-                        :
-                      </label>
-                      <Field
-                        name={fieldName}
-                        type={
-                          fieldName.includes("password") ? "password" : "text"
-                        }
-                        className={`w-full px-3 py-2 border rounded-md ${
-                          touched[fieldName] && errors[fieldName]
-                            ? "border-rose-500"
-                            : "border-gray-300"
-                        } focus:outline-none focus:ring-2 focus:ring-violet-500`}
-                      />
-                      <ErrorMessage
-                        name={fieldName}
-                        component="div"
-                        className="text-red-500 text-sm mt-1"
-                      />
-                    </div>
-                  ))}
-
-                  <div className="flex items-center">
-                    <Field
-                      type="checkbox"
-                      name="termsAndConditions"
-                      className="mr-2 mt-2"
+              {({ isSubmitting, errors, touched }) => (
+                <Form className="mt-6 space-y-3 px-4">
+                  {fields.map((field) => (
+                    <FormField
+                      key={field.name}
+                      name={field.name}
+                      label={field.label}
+                      type={field.type}
+                      placeholder={`Enter your ${field.label.toLowerCase()}`}
                     />
-                    <label
-                      htmlFor="termsAndConditions"
-                      className="font-medium text-sm text-gray-900 mt-2"
-                    >
-                      Accept Terms and Conditions
-                    </label>
+                  ))}
+                  <div className="form-control flex flex-col">
+                    <div className="flex items-center">
+                      <Field
+                        type="checkbox"
+                        name="termsAndConditions"
+                        className="mr-2 ml-1 mt-4"
+                      />
+                      <label
+                        htmlFor="termsAndConditions"
+                        className={`font-medium text-sm mt-4 ${
+                          errors.termsAndConditions && touched.termsAndConditions
+                            ? "text-red-500"
+                            : "text-gray-900"
+                        }`}
+                      >
+                        Accept Terms and Conditions
+                      </label>
+                    </div>
+                    
                   </div>
-                  <ErrorMessage
-                    name="termsAndConditions"
-                    component="div"
-                    className="text-red-500 text-sm mt-1"
-                  />
-
-                  <div className="py-6">
+                  <div className="py-2 ">
                     <button
                       type="submit"
-                      disabled={isSubmitting}c
-                      className="w-full drop-shadow-lg active:scale-[.98] active:duration-75 hover:scale-[1.01] ease-in-out transition-all py-3 rounded-xl bg-gradient-to-tr from-violet-400 to-pink-400 text-white text-lg font-bold"
+                      disabled={isSubmitting}
+                      className="animated-bg mt-4 mb-4 w-full drop-shadow-lg active:scale-[.98] active:duration-75 hover:scale-[1.01] ease-in-out transition-all py-2 rounded-lg bg-gradient-to-tr from-violet-400 to-pink-400 text-white text-base font-bold"
                     >
                       Sign up
                     </button>
                   </div>
                 </Form>
-              )}}
+              )}
             </Formik>
           </div>
         </div>
       </div>
-    </div>
   );
 };
 

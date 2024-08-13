@@ -1,36 +1,43 @@
-import React from "react";
-import { Formik } from "formik";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Formik, Form } from "formik";
+import { useNavigate } from "react-router-dom";
 import Ecomm from "$api/Ecomm";
 import * as Yup from "yup";
+import FormField from "$components/FormField"; 
 import NavBar from "$components/NavBar";
 
 const initialValues = { userName: "" };
 
-const onSubmit = (values) => {
-  Ecomm.post("/forgotPassword", { email: values.userName })
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((err) => console.log(err));
-  console.log("Form Data", values);
-};
-
-const validationSchema = Yup.object({
-  userName: Yup.string().email("Invalid Email Format").required("Required!"),
-});
-
 function ForgotPassword() {
-  const navigate = useNavigate();
+  const [showPopup, setShowPopup] = useState(false);
+
+  const onSubmit = (values, { setSubmitting }) => {
+    Ecomm.post("/forgotPassword", { email: values.userName })
+      .then((res) => {
+        console.log(res.link);
+        setShowPopup(true);
+        setTimeout(() => {
+          setShowPopup(false);
+          
+        },3000);
+      })
+      .catch((err) => console.log(err))
+      .finally(() => setSubmitting(false));
+  };
+
+  const validationSchema = Yup.object({
+    userName: Yup.string().email("Invalid Email Format").required("Required!"),
+  });
 
   return (
+    
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
     >
-      {(formik) => (
-        <div className="flex flex-col min-h-screen bg-gradient-to-tr from-violet-100 to-pink-100">
+      {({ isSubmitting }) => (
+        
           <div className="flex-grow flex items-center justify-center px-4 py-8">
             <div className="w-full max-w-md">
               <div className="bg-white rounded-3xl border-2 border-gray-200 overflow-hidden shadow-lg">
@@ -40,41 +47,38 @@ function ForgotPassword() {
                     Enter registered mail for reset link
                   </p>
                 </div>
-
-                <div className="bg-gray-50 px-8 mt-8">
-                  <form className="space-y-4" onSubmit={formik.handleSubmit}>
-                    <div className="form-control flex flex-col">
-                      <label className="text-base font-semibold">Email:</label>
-                      <input
-                        name="userName"
-                        type="email"
-                        className={`py-2 rounded-md border-2 ${
-                          formik.touched.userName && formik.errors.userName
-                            ? "border-2 border-rose-500"
-                            : "border-gray-200"
-                        }`}
-                        {...formik.getFieldProps("userName")}
-                      />
-                      {formik.touched.userName && formik.errors.userName && (
-                        <div className="text-red-500 text-sm mt-1">
-                          {formik.errors.userName}
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="mt-6 py-4">
-                      <button
-                        type="submit"
-                        className="w-full drop-shadow-lg active:scale-[.98] active:duration-75 hover:scale-[1.01] ease-in-out transition-all py-3 rounded-xl bg-gradient-to-tr from-violet-400 to-pink-400 text-white text-lg font-bold"
-                      >
-                        Send Link
-                      </button>
-                    </div>
-                  </form>
-                </div>
+                <Form className="space-y-4 px-6 py-4">
+                  <FormField
+                    name="userName"
+                    label="Email"
+                    type="email"
+                    placeholder="Enter your email"
+                  />
+                  <div className="mt-6 py-4">
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="animated-bg w-full drop-shadow-lg active:scale-[.98] active:duration-75 hover:scale-[1.01] ease-in-out transition-all py-3 rounded-xl bg-gradient-to-tr from-violet-400 to-pink-400 text-white text-lg font-bold"
+                    >
+                      {isSubmitting ? "Sending..." : "Send Link"}
+                    </button>
+                  </div>
+                </Form>
               </div>
             </div>
-          </div>
+
+          {showPopup && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+              <div className="bg-white rounded-lg p-8 flex flex-col items-center">
+                <svg className="w-16 h-16 text-green-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <p className="text-lg text-center">
+                  Check Mail for Password Reset.
+                </p>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </Formik>
