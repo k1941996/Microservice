@@ -1,7 +1,6 @@
 import React from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import { setAccountId, setToken } from "$utils/tokenUtil";
-import NavBar from "$components/NavBar";
 import { Link, useNavigate } from "react-router-dom";
 import Ecomm from "$api/Ecomm";
 import * as Yup from "yup";
