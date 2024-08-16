@@ -41,7 +41,7 @@ function NewLogin() {
     <div className="flex flex-col ">
       <div className="flex-grow flex items-center justify-center mt-40  px-4 py-8">
         <div className="w-full max-w-md ">
-          <div className="bg-gray-50 rounded-3xl border-2 border-gray-200 overflow-hidden shadow-lg">
+          <div className="bg-gray-50 rounded-3xl border-2 border-gray-200 overflow-hidden shadow-lg dark:bg-neutral-700	dark:border-1 dark:border-zinc-600">
             <div className="animated-bg text-white pt-6 pb-2 text-center">
               <h1 className="text-4xl font-bold">Sign in</h1>
               <p className="text-center text-md py-4">
@@ -55,7 +55,7 @@ function NewLogin() {
               </p>
             </div>
 
-            <div className="bg-gray-50 px-8 mt-8">
+            <div className="bg-gray-50 px-8 mt-8  dark:bg-neutral-700	">
               <Formik
                 initialValues={initialValues}
                 validationSchema={validationSchema}
@@ -79,7 +79,7 @@ function NewLogin() {
                     <p className="text-center text-sm mb-6">
                       <Link
                         to="/forgotpassword"
-                        className="text-violet-500 hover:underline"
+                        className="text-violet-500 hover:underline dark:text-zinc-100"
                       >
                         Forgot Password?
                       </Link>

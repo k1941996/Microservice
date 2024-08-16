@@ -64,7 +64,7 @@ function ResetPassword() {
       {({ touched, errors }) => (
           <div className="flex-grow flex items-center justify-center px-4 py-8">
             <div className="w-full max-w-md">
-              <div className="bg-gray-50 rounded-3xl border-2 border-gray-200 overflow-hidden shadow-lg">
+              <div className="bg-gray-50 rounded-3xl border-2 border-gray-200 overflow-hidden shadow-lg dark:bg-neutral-700	dark:border-1 dark:border-zinc-600">
                 <div className="animated-bg text-white pt-6 pb-2 text-center">
                   <h1 className="text-4xl font-bold">Reset Password</h1>
                   <p className="text-center text-md py-4">
@@ -101,7 +101,7 @@ function ResetPassword() {
                         className={`w-full px-3 py-2 border rounded-md ${
                           touched[fieldName] && errors[fieldName]
                             ? "border-2 border-rose-500"
-                            : "border-gray-300"
+                            : "border-gray-300 dark:border-0"
                         } focus:outline-none focus:ring-2 focus:ring-blue-500`}
                       />
                       <ErrorMessage

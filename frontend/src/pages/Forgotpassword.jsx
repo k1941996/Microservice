@@ -40,7 +40,7 @@ function ForgotPassword() {
         
           <div className="flex-grow flex items-center justify-center px-4 py-8">
             <div className="w-full max-w-md">
-              <div className="bg-white rounded-3xl border-2 border-gray-200 overflow-hidden shadow-lg">
+              <div className="bg-gray-50 rounded-3xl border-2 border-gray-200 overflow-hidden shadow-lg dark:bg-neutral-700	dark:border-1 dark:border-zinc-600">
                 <div className="animated-bg text-white pt-6 pb-2 text-center">
                   <h1 className="text-4xl font-bold">Forgot Password ?</h1>
                   <p className="text-center text-md py-4">

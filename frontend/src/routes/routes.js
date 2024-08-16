@@ -11,7 +11,7 @@ import ResetPassword from "$pages/Resetpassword";
 
 const Wrapper = () => {
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-tr from-violet-100 to-pink-100">
+    <div className="flex flex-col min-h-screen bg-gradient-to-tr from-violet-100 to-pink-100 dark:bg-gradient-to-tr dark:from-gray-500 dark:to-zinc-500">
       <NavBar />
 
       <Outlet />

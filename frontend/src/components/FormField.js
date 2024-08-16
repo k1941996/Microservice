@@ -20,7 +20,7 @@ const FormField = ({ name, label, type = 'text', placeholder = '' }) => {
               {...field}
               type={type === 'password' ? (showPassword ? 'text' : 'password') : type}
               placeholder={placeholder}
-              className={`w-full px-3 py-2 border rounded-md ${
+              className={`w-full px-3 py-2 border rounded-md dark:border-0 ${
                 touched[name] && errors[name]
                   ? "border-2 border-rose-500"
                   : "border-gray-300"

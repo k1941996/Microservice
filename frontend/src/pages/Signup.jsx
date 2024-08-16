@@ -63,7 +63,7 @@ const Signup = ({ type }) => {
   return (
       <div className="flex-grow flex justify-center mt-20">
         <div className="w-full max-w-md">
-          <div className="bg-gray-50 rounded-xl border border-gray-200 overflow-hidden shadow-lg">
+          <div className="bg-gray-50 rounded-xl border border-gray-200 overflow-hidden shadow-lg dark:bg-neutral-700	dark:border-1 dark:border-zinc-600">
             <div className="animated-bg text-white pt-4 pb-2 text-center">
               <h1 className="text-3xl font-bold">Sign up</h1>{" "}
               <h3 className="text-xl text-center capitalize mt-2">
@@ -105,7 +105,7 @@ const Signup = ({ type }) => {
                         className={`font-medium text-sm mt-4 ${
                           errors.termsAndConditions && touched.termsAndConditions
                             ? "text-red-500"
-                            : "text-gray-900"
+                            : "text-gray-900 dark:text-slate-300"
                         }`}
                       >
                         Accept Terms and Conditions
