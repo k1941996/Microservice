@@ -8,7 +8,7 @@ import Forgotpassword from "$pages/Forgotpassword";
 
 const Wrapper = () => {
   return (
-    <div>
+    <div className="flex flex-col min-h-screen bg-gradient-to-tr from-violet-100 to-pink-100">
       <NavBar />
       <Outlet />
     </div>
