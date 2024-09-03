@@ -1,19 +1,15 @@
-import Signup from "$pages/Signup";
 import { createBrowserRouter, Outlet } from "react-router-dom";
+import NavBar from "$components/NavBar";
 import Login from "$pages/Login";
 import Home from "$pages/Home";
 import Cart from "$pages/Cart";
-import { element } from "prop-types";
-import Newlogin from "$pages/Newlogin";
+import Signup from "$pages/Signup";
 import Forgotpassword from "$pages/Forgotpassword";
-import NavBar from "$components/NavBar";
-
 
 const Wrapper = () => {
   return (
     <div>
       <NavBar />
-
       <Outlet />
     </div>
   );
@@ -44,10 +40,6 @@ const appRoutes = createBrowserRouter([
         path: "/cart",
         element: <Cart />,
       },
-      // {
-      //   path:"Newlogin",
-      //   element:<Newlogin/>
-      // },
       {
         path: "Forgotpassword",
         element: <Forgotpassword />,
