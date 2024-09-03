@@ -31,7 +31,7 @@
   "alias": {
     "$routes": "./src/routes",
     "$pages": "./src/pages",
-    "$api": "./src/api",
+    "$apis": "./src/apis",
     "$components": "./src/components",
     "$utils": "./src/utils"
   }

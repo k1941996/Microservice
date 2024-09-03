@@ -5,7 +5,7 @@
     "downlevelIteration": true,
     "baseUrl": ".",
     "paths": {
-      "$api/*": ["./src/api/*"],
+      "$apis/*": ["./src/apis/*"],
       "$utils/*": ["./src/utils/*"],
       "$inputComponents/*": ["./src/components/InputComponents/*"],
       "$components/*": ["./src/components/*"],

@@ -3,7 +3,7 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { setAccountId, setToken } from "$utils/tokenUtil";
 import { Link, useNavigate } from "react-router-dom";
-import Ecomm from "$api/Ecomm";
+import Ecomm from "$apis/EcommApi";
 import FormField from "$components/FormField";
 
 const Signup = ({ type }) => {

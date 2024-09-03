@@ -2,10 +2,8 @@ import React from "react";
 import { Formik, Form } from "formik";
 import { setAccountId, setToken } from "$utils/tokenUtil";
 import { Link, useNavigate } from "react-router-dom";
-import Ecomm from "$api/Ecomm";
 import * as Yup from "yup";
 import FormField from "$components/FormField";
-import NavBar from "$components/NavBar";
 
 const initialValues = { userName: "", password: "" };
 
@@ -17,22 +15,18 @@ const validationSchema = Yup.object({
 function NewLogin() {
   const navigate = useNavigate();
 
-  const loginUser = (loginData) => {
-    const url = `/login`;
-    Ecomm.post(url, loginData)
-      .then((res) => {
-        console.log(res);
-        setToken(res.token);
-        setAccountId(res.data._id);
-        navigate("/");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const loginUser = async (loginData) => {
+    try {
+      const res = await loginUser(loginData);
+      setToken(res.token);
+      setAccountId(res.data._id);
+      navigate("/");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleSubmit = (values, { setSubmitting }) => {
-    console.log("Form Data", values);
     loginUser(values);
     setSubmitting(false);
   };

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useParams, useNavigate } from "react-router-dom";
-import Ecomm from "$api/Ecomm";
+import Ecomm from "src/apis/Ecomm";
 import * as Yup from "yup";
 import { FiEye, FiEyeOff } from "react-icons/fi"; // Eye icons for visibility toggle
 import NavBar from "$components/NavBar";
