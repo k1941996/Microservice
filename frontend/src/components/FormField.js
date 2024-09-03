@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { Field, ErrorMessage } from 'formik';
+import React, { useState } from "react";
+import { Field, ErrorMessage } from "formik";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-const FormField = ({ name, label, type = 'text', placeholder = '' }) => {
+const FormField = ({ name, label, type = "text", placeholder = "" }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
@@ -10,33 +11,44 @@ const FormField = ({ name, label, type = 'text', placeholder = '' }) => {
 
   return (
     <div className="form-control flex flex-col">
-      <label htmlFor={name} className="text-base font-semibold mb-1">
-        {label}
-      </label>
-      <div className="relative">
+      <div>
         <Field name={name}>
           {({ field, form: { touched, errors } }) => (
-            <input
-              {...field}
-              type={type === 'password' ? (showPassword ? 'text' : 'password') : type}
-              placeholder={placeholder}
-              className={`w-full px-3 py-2 border rounded-md ${
-                touched[name] && errors[name]
-                  ? "border-2 border-rose-500"
-                  : "border-gray-300"
-              } focus:outline-none focus:ring-2 focus:ring-violet-500 ${
-                type === 'password' ? 'pr-10' : ''
-              }`}
-            />
+            <>
+              <label
+                htmlFor={name}
+                className={`text-base font-semibold mb-1 ${touched[name] && errors[name] ? `text-red-500` : ``}`}
+              >
+                {label}
+              </label>
+              <div
+                className={`input input-bordered flex  px-2 items-center gap-2 h-11 w-full focus-within:outline-none focus:outline-none focus:outline-0 ${
+                  touched[name] && errors[name]
+                    ? "border-2 focus-within:border-rose-500 border-rose-500 focus:border-rose-500"
+                    : "border-gray-300"
+                }`}
+              >
+                <input
+                  {...field}
+                  type={type === "password" ? (showPassword ? "text" : "password") : type}
+                  placeholder={placeholder}
+                  className={`w-full  rounded-md border-transparent focus:border-transparent focus:ring-0`}
+                />
+                {type === "password" ? (
+                  <div onClick={togglePasswordVisibility}>
+                    {showPassword ? (
+                      <FaEyeSlash fontSize={20} style={{ cursor: "pointer" }} />
+                    ) : (
+                      <FaEye fontSize={20} style={{ cursor: "pointer" }} />
+                    )}
+                  </div>
+                ) : null}
+              </div>
+            </>
           )}
         </Field>
-        
       </div>
-      <ErrorMessage
-        name={name}
-        component="div"
-        className="text-red-500 text-sm mt-1"
-      />
+      <ErrorMessage name={name} component="div" className="text-red-500 text-sm mt-1" />
     </div>
   );
 };
