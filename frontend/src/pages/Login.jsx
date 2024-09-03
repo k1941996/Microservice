@@ -42,45 +42,25 @@ function NewLogin() {
       <div className="flex-grow flex items-center justify-center mt-40  px-4 py-8">
         <div className="w-full max-w-md ">
           <div className="bg-gray-50 rounded-3xl border-2 border-gray-200 overflow-hidden shadow-lg">
-            <div className="animated-bg text-white pt-6 pb-2 text-center">
+            <div className="animated-bg pt-6 pb-2 text-center">
               <h1 className="text-4xl font-bold">Sign in</h1>
               <p className="text-center text-md py-4">
                 Don't have an account?&nbsp;
-                <Link
-                  to="/signup/customer"
-                  className="text-zinc-900 hover:underline"
-                >
+                <Link to="/signup/customer" className="text-zinc-900 hover:underline">
                   Sign up Now!
                 </Link>
               </p>
             </div>
 
             <div className="bg-gray-50 px-8 mt-8">
-              <Formik
-                initialValues={initialValues}
-                validationSchema={validationSchema}
-                onSubmit={handleSubmit}
-              >
+              <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
                 {({ isSubmitting }) => (
                   <Form className="space-y-4">
-                    <FormField
-                      name="userName"
-                      label="Email"
-                      type="text"
-                      placeholder="Enter your email"
-                    />
-                    <FormField
-                      name="password"
-                      label="Password"
-                      type="password"
-                      placeholder="Enter your password"
-                    />
+                    <FormField name="userName" label="Email" type="text" placeholder="Enter your email" />
+                    <FormField name="password" label="Password" type="password" placeholder="Enter your password" />
 
                     <p className="text-center text-sm mb-6">
-                      <Link
-                        to="/forgotpassword"
-                        className="text-violet-500 hover:underline"
-                      >
+                      <Link to="/forgotpassword" className="text-violet-500 hover:underline">
                         Forgot Password?
                       </Link>
                     </p>

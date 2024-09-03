@@ -22,7 +22,7 @@ const FormField = ({ name, label, type = "text", placeholder = "" }) => {
                 {label}
               </label>
               <div
-                className={`input input-bordered flex  px-2items-center gap-2 h-11 w-full focus-within:outline-none focus:outline-none focus:outline-0 ${
+                className={`input input-bordered flex items-center  px-2items-center gap-2 h-11 w-full focus-within:outline-none focus:outline-none focus:outline-0 ${
                   touched[name] && errors[name]
                     ? "border-2 focus-within:border-rose-500 border-rose-500 focus:border-rose-500"
                     : "border-gray-300"
