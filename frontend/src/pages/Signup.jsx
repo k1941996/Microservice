@@ -3,8 +3,8 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { setAccountId, setToken } from "$utils/tokenUtil";
 import { Link, useNavigate } from "react-router-dom";
-import Ecomm from "$apis/EcommApi";
-import FormField from "$components/FormField";
+import FormField from "$inputComponents/FormField";
+import { signUp } from "$apis/AuthApis.js";
 
 const Signup = ({ type }) => {
   const navigate = useNavigate();
@@ -33,20 +33,18 @@ const Signup = ({ type }) => {
 
   const handleSubmit = (values, { setSubmitting }) => {
     setSubmitting(true);
-    const url = `/signup/${type}`;
-    Ecomm.post(url, values)
-      .then((res) => {
-        console.log(res);
-        setToken(res.token);
-        setAccountId(res.data._id);
-        navigate("/");
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setSubmitting(false);
-      });
+    
+    try {
+      const res = signUp(type,values);
+      console.log(res);
+      setToken(res.token);
+      setAccountId(res.data._id);
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const fields = [

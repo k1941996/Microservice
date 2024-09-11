@@ -1,21 +1,25 @@
 import React from "react";
 import { Formik, Form } from "formik";
-import { setAccountId, setToken } from "$utils/tokenUtil";
 import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
-import FormField from "$components/FormField";
+
+import FormField from "$inputComponents/FormField";
+import { loginUser } from "$apis/AuthApis.js";
+import { setAccountId, setToken } from "$utils/tokenUtil";
+import { useToast } from "$components/Toaster/Toaster";
 
 const initialValues = { userName: "", password: "" };
 
 const validationSchema = Yup.object({
-  userName: Yup.string().email("Invalid Email Format").required("Required!"),
+  userName: Yup.string().required("Required!"),
   password: Yup.string().min(8).required("Required!"),
 });
 
-function NewLogin() {
+const Login = () => {
   const navigate = useNavigate();
 
-  const loginUser = async (loginData) => {
+  const toast = useToast();
+  const login = async (loginData) => {
     try {
       const res = await loginUser(loginData);
       setToken(res.token);
@@ -26,8 +30,8 @@ function NewLogin() {
     }
   };
 
-  const handleSubmit = (values, { setSubmitting }) => {
-    loginUser(values);
+  const handleSubmit = async (values, { setSubmitting }) => {
+    await login(values);
     setSubmitting(false);
   };
 
@@ -50,7 +54,7 @@ function NewLogin() {
               <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
                 {({ isSubmitting }) => (
                   <Form className="space-y-4">
-                    <FormField name="userName" label="Email" type="text" placeholder="Enter your email" />
+                    <FormField name="userName" label="Email/Username" type="text" placeholder="Enter your email" />
                     <FormField name="password" label="Password" type="password" placeholder="Enter your password" />
 
                     <p className="text-center text-sm mb-6">
@@ -60,12 +64,8 @@ function NewLogin() {
                     </p>
 
                     <div className="py-4">
-                      <button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="animated-bg w-full drop-shadow-lg mb-8 active:scale-[.98] active:duration-75 hover:scale-[1.01] ease-in-out transition-all py-3 rounded-xl bg-gradient-to-tr from-violet-400 to-pink-400 text-white text-lg font-bold"
-                      >
-                        Sign in
+                      <button type="submit" disabled={isSubmitting} className="btn w-full btn-outline">
+                        {isSubmitting ? <span className="loading loading-dots loading-sm"></span> : `Sign in`}
                       </button>
                     </div>
                   </Form>
@@ -77,6 +77,6 @@ function NewLogin() {
       </div>
     </div>
   );
-}
+};
 
-export default NewLogin;
+export default Login;

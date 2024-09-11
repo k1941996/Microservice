@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Field, ErrorMessage } from "formik";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import PropTypes from "prop-types";
 
-const FormField = ({ name, label, type = "text", placeholder = "" }) => {
+const FormField = (props) => {
+  const { name, label, type = "text", placeholder = "" } = props;
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
@@ -53,4 +55,10 @@ const FormField = ({ name, label, type = "text", placeholder = "" }) => {
   );
 };
 
+FormField.propTypes = {
+  name: PropTypes.string,
+  label: PropTypes.string,
+  type: PropTypes.string,
+  placeholder: PropTypes.string,
+};
 export default FormField;

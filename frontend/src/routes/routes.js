@@ -5,10 +5,11 @@ import Home from "$pages/Home";
 import Cart from "$pages/Cart";
 import Signup from "$pages/Signup";
 import Forgotpassword from "$pages/Forgotpassword";
+import ResetPassword from "$pages/Resetpassword";
 
 const Wrapper = () => {
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-tr from-violet-100 to-pink-100">
+    <div className="flex flex-col min-h-screen ">
       <NavBar />
       <Outlet />
     </div>
@@ -43,6 +44,10 @@ const appRoutes = createBrowserRouter([
       {
         path: "Forgotpassword",
         element: <Forgotpassword />,
+      },
+      {
+        path: "/reset/:accountId/:token",
+        element: <ResetPassword />,
       },
     ],
   },

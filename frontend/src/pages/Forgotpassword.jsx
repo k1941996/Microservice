@@ -1,25 +1,28 @@
 import React, { useState } from "react";
 import { Formik, Form } from "formik";
-import Ecomm from "$apis/EcommApi";
+
 import * as Yup from "yup";
-import FormField from "$components/FormField";
+import FormField from "$inputComponents/FormField";
+import { forgotPassword } from "$apis/AuthApis.js";
 
 const initialValues = { userName: "" };
 
 function ForgotPassword() {
   const [showPopup, setShowPopup] = useState(false);
 
-  const onSubmit = (values, { setSubmitting }) => {
-    Ecomm.post("/forgotPassword", { email: values.userName })
-      .then((res) => {
-        console.log(res.link);
-        setShowPopup(true);
-        setTimeout(() => {
-          setShowPopup(false);
-        }, 3000);
-      })
-      .catch((err) => console.log(err))
-      .finally(() => setSubmitting(false));
+  const onSubmit = async (values, { setSubmitting }) => {
+    try {
+      const res = await forgotPassword(values.userName);
+      console.log(res.link);
+      setShowPopup(true);
+      setTimeout(() => {
+        setShowPopup(false);
+      }, 3000);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const validationSchema = Yup.object({
