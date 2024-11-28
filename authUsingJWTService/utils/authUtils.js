@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { v4 as uuid } from 'uuid';
 
-export const generatePassowrdId = () => {
+export const generatePasswordId = () => {
   const password_id = uuid();
   return password_id;
 };

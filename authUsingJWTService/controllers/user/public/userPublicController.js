@@ -2,7 +2,7 @@ import User from '#models/UserModel.js';
 import { Admin, Customer } from '#models/ModelTypes.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { generatePassowrdId, generateToken } from '#utils/authUtils.js';
+import { generatePasswordId, generateToken } from '#utils/authUtils.js';
 
 const signUp = async (request, response) => {
   const { name, userName, termsAndConditions, email, password } = request.body;
@@ -11,55 +11,55 @@ const signUp = async (request, response) => {
   });
   if (user) {
     return response.status(409).json({ message: 'Email or username already taken' });
-  } else {
-    try {
-      const role = request.originalUrl.split('/')[2];
-      const salt = await bcrypt.genSalt(12);
-      const hashedPassword = await bcrypt.hash(password, salt);
-
-      const password_id = generatePassowrdId();
-      const newUser = new User({
-        name,
-        userName,
-        email,
-        password: hashedPassword,
-        termsAndConditions,
-        password_id,
-      });
-
-      let saved_user = await newUser.save();
-
-      saved_user = saved_user.toObject();
-      delete saved_user.password;
-      const token = generateToken({ ...saved_user, password_id });
-
-      if (role === 'admin') {
-        try {
-          const newAdmin = new Admin({ userId: saved_user._id });
-          const adminDetails = await newAdmin.save();
-          await User.findByIdAndUpdate(saved_user._id, { role: adminDetails._id });
-        } catch (error) {
-          return response
-            .status(500)
-            .send({ message: 'Creation of admin failed', error });
-        }
-      } else {
-        try {
-          const newCustomer = new Customer({ userId: saved_user._id });
-          const customerDetails = await newCustomer.save();
-          await User.findByIdAndUpdate(saved_user._id, { role: customerDetails._id });
-        } catch (error) {
-          return response
-            .status(500)
-            .send({ message: 'Creation of admin failed', error });
-        }
-      }
-      response
-        .status(201)
-        .send({ message: 'User created successfully', data: saved_user, token });
-    } catch (error) {
-      console.log(error);
+  }
+  try {
+    const role = request.originalUrl.split('/')[2];
+    if (!['admin', 'customer'].includes(role)) {
+      return response.status(400).json({ message: 'Invalid role specified' });
     }
+    const salt = await bcrypt.genSalt(12);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const password_id = generatePasswordId();
+    const newUser = new User({
+      name,
+      userName,
+      email,
+      password: hashedPassword,
+      termsAndConditions,
+      password_id,
+      role,
+    });
+
+    let saved_user = await newUser.save();
+
+    saved_user = saved_user.toObject();
+    delete saved_user.password;
+    const token = generateToken({ ...saved_user, password_id });
+
+    if (role === 'admin') {
+      try {
+        const newAdmin = new Admin({ userId: saved_user._id });
+        const adminDetails = await newAdmin.save();
+        await User.findByIdAndUpdate(saved_user._id, { role: adminDetails._id });
+      } catch (error) {
+        return response.status(500).send({ message: 'Creation of admin failed', error });
+      }
+    } else {
+      try {
+        const newCustomer = new Customer({ userId: saved_user._id });
+        const customerDetails = await newCustomer.save();
+        await User.findByIdAndUpdate(saved_user._id, { role: customerDetails._id });
+      } catch (error) {
+        return response.status(500).send({ message: 'Creation of admin failed', error });
+      }
+    }
+    response
+      .status(201)
+      .send({ message: 'User created successfully', data: saved_user, token });
+  } catch (error) {
+    console.log(error);
+    return response.status(500).json({ message: 'User creation failed', error });
   }
 };
 
@@ -68,19 +68,20 @@ const login = async (request, response) => {
     const { userName, password } = request.body;
     let user = await User.findOne({
       $or: [{ userName }, { email: userName }],
-    }).lean();
+    });
 
     const isPassowrdCorrect = user && (await bcrypt.compare(password, user?.password));
     if (user && isPassowrdCorrect) {
       const password_id = user.password_id;
       const token = generateToken({ ...user, password_id });
+      user = user.toObject();
       delete user.password;
       delete user.password_id;
       delete user.termsAndConditions;
       delete user.address;
       response.status(200).send({ data: user, token });
     } else {
-      response.status(404).send({ message: 'Invalid username or password' });
+      response.status(401).send({ message: 'Invalid username or password' });
     }
   } catch (error) {
     console.log(error);
@@ -94,20 +95,11 @@ const forgotPassword = async (request, response) => {
   if (user) {
     const secret = user._id + process.env.JWT_SECRET_KEY;
     const token = jwt.sign({ userId: user._id }, secret, { expiresIn: '15min' });
-    const link = `http://localhost:3000/reset/${user._id}/${token}`;
+    const link = `${process.env.BASE_URL}:${process.env.FE_PORT}/reset/${user._id}/${token}`;
     console.log(link);
-    response.status(200).send({
-      message: `If a matching account was found, an email was sent to ${
-        email || `email you entered`
-      } to allow you to reset your password.`,
-      link,
-    });
+    response.status(200).send({ link });
   } else {
-    response.status(200).send({
-      message: `If a matching account was found, an email was sent to ${
-        email || `email you entered`
-      } to allow you to reset your password.`,
-    });
+    response.status(200).send({});
   }
 };
 
@@ -120,7 +112,7 @@ const resetPassword = async (request, response) => {
     jwt.verify(token, new_secret);
     const salt = await bcrypt.genSalt(12);
     const hashedPassword = await bcrypt.hash(password, salt);
-    const password_id = generatePassowrdId();
+    const password_id = generatePasswordId();
     const updatedUser = await User.findByIdAndUpdate(
       user._id,
       {
@@ -161,5 +153,5 @@ const checkAdmin = async (request, response) => {
   }
 };
 
-const UserPublicController = { signUp, login, forgotPassword, resetPassword,  checkAdmin };
+const UserPublicController = { signUp, login, forgotPassword, resetPassword, checkAdmin };
 export default UserPublicController;

@@ -1,25 +1,53 @@
-import { getAccountId, getToken } from "$utils/tokenUtil";
-import axios from "axios";
-const Ecomm = axios.create({
-  baseURL: "http://localhost:8000",
+import { getAccountId, getToken } from '$utils/tokenUtil';
+import axios from 'axios';
+const eComm = axios.create({
+  baseURL: 'http://localhost:8000',
 });
-Ecomm.interceptors.request.use(
+eComm.interceptors.request.use(
   (config) => {
-    config.headers.Authorization = getToken();
-    config.headers.accountid = getAccountId();
+    config.headers['Authorization'] = getToken();
+    config.headers['accountid'] = getAccountId();
     return config;
   },
   (error) => {
     return Promise.reject(error);
   }
 );
-Ecomm.interceptors.response.use(
+eComm.interceptors.response.use(
   (response) => {
     return response.data;
   },
   (error) => {
+    if (error.response) {
+      // Handle specific HTTP error responses
+      if (error.response.status === 401) {
+        // Handle unauthorized errors (e.g., redirect to login)
+        console.error('Unauthorized, please login again');
+      } else if (error.response.status === 500) {
+        // Handle server errors
+        console.error('Server error occurred');
+      }
+    } else {
+      // Handle network or other errors
+      console.error('Network error or no response');
+    }
     return Promise.reject(error);
   }
 );
 
-export default Ecomm;
+export default eComm;
+
+export const eCommBaseQuery = async ({ url, method = 'GET', data, params }) => {
+  try {
+    const response = await eComm({
+      url,
+      method,
+      data,
+      params,
+    });
+    return { data: response.data };
+  } catch (error) {
+    // RTK Query expects error to be in `{ error: ... }` format
+    return { error: error.response ? error.response.data : error.message };
+  }
+};

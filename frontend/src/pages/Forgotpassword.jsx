@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { Formik, Form } from "formik";
+import React, { useState } from 'react';
+import { Formik, Form } from 'formik';
 
-import * as Yup from "yup";
-import FormField from "$inputComponents/FormField";
-import { forgotPassword } from "$apis/AuthApis.js";
+import * as Yup from 'yup';
+import FormField from '$inputComponents/FormField';
+import { forgotPassword } from '$apis/AuthApis.js';
 
-const initialValues = { userName: "" };
+const initialValues = { userName: '' };
 
 function ForgotPassword() {
   const [showPopup, setShowPopup] = useState(false);
@@ -14,6 +14,7 @@ function ForgotPassword() {
     try {
       const res = await forgotPassword(values.userName);
       console.log(res.link);
+
       setShowPopup(true);
       setTimeout(() => {
         setShowPopup(false);
@@ -26,12 +27,12 @@ function ForgotPassword() {
   };
 
   const validationSchema = Yup.object({
-    userName: Yup.string().email("Invalid Email Format").required("Required!"),
+    userName: Yup.string().email('Invalid Email Format').required('Required!'),
   });
 
   return (
     <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
-      {({ isSubmitting }) => (
+      {({ isSubmitting, values }) => (
         <div className="flex-grow flex items-center justify-center px-4 py-8">
           <div className="w-full max-w-md">
             <div className="bg-white rounded-3xl border-2 border-gray-200 overflow-hidden shadow-lg">
@@ -47,7 +48,7 @@ function ForgotPassword() {
                     disabled={isSubmitting}
                     className="animated-bg w-full drop-shadow-lg active:scale-[.98] active:duration-75 hover:scale-[1.01] ease-in-out transition-all py-3 rounded-xl bg-gradient-to-tr from-violet-400 to-pink-400 text-white text-lg font-bold"
                   >
-                    {isSubmitting ? "Sending..." : "Send Link"}
+                    {isSubmitting ? 'Sending...' : 'Send Link'}
                   </button>
                 </div>
               </Form>
@@ -56,7 +57,7 @@ function ForgotPassword() {
 
           {showPopup && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-              <div className="bg-white rounded-lg p-8 flex flex-col items-center">
+              <div className="bg-white rounded-lg p-8 flex flex-col items-center max-w-lg">
                 <svg
                   className="w-16 h-16 text-green-500 mb-4"
                   fill="none"
@@ -66,7 +67,10 @@ function ForgotPassword() {
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
                 </svg>
-                <p className="text-lg text-center">Check Mail for Password Reset.</p>
+                <p className="text-lg text-center">
+                  If a matching account was found, an email was sent to {values.userName || `email you entered`} to
+                  allow you to reset your password.
+                </p>
               </div>
             </div>
           )}

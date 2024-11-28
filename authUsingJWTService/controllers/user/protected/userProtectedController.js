@@ -1,13 +1,13 @@
 import User from '#models/UserModel.js';
 import bcrypt from 'bcrypt';
-import { generatePassowrdId, generateToken } from '#utils/authUtils.js';
+import { generatePasswordId, generateToken } from '#utils/authUtils.js';
 
 const updateUserPassword = async (request, response) => {
   const { password, old_password } = request.body;
   const user = request.user;
   const isPassowrdCorrect = user && (await bcrypt.compare(old_password, user?.password));
   if (isPassowrdCorrect) {
-    const password_id = generatePassowrdId();
+    const password_id = generatePasswordId();
     const salt = await bcrypt.genSalt(12);
 
     const hashedPassword = await bcrypt.hash(password, salt);
