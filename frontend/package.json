@@ -25,6 +25,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@parcel/transformer-sass": "^2.12.0",
     "buffer": "^6.0.3",
     "daisyui": "^4.12.10",
     "parcel": "^2.12.0",
@@ -40,6 +41,6 @@
     "$components": "./src/components",
     "$utils": "./src/utils",
     "$inputComponents": "./src/components/InputComponents",
-    "$redux":"./src/Redux/"
+    "$redux": "./src/Redux/"
   }
 }
