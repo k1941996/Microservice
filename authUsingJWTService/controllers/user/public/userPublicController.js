@@ -3,6 +3,18 @@ import { Admin, Customer } from '#models/ModelTypes.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { generatePasswordId, generateToken } from '#utils/authUtils.js';
+import EventBus from '../../../../shared/eventBus/EventBus.js';
+import EventTypes from '../../../../shared/events/EventTypes.js';
+const { USER_EVENTS } = EventTypes;
+
+const publishEventSafely = async (eventType, data) => {
+  try {
+    await EventBus.publish(eventType, data);
+  } catch (error) {
+    console.error(`Failed to publish ${eventType} event:`, error);
+    // Don't throw error, just log it
+  }
+};
 
 const signUp = async (request, response) => {
   const { name, userName, termsAndConditions, email, password } = request.body;
@@ -42,6 +54,13 @@ const signUp = async (request, response) => {
         const newAdmin = new Admin({ userId: saved_user._id });
         const adminDetails = await newAdmin.save();
         await User.findByIdAndUpdate(saved_user._id, { role: adminDetails._id });
+        
+        // Publish admin created event safely
+        await publishEventSafely(USER_EVENTS.ADMIN_CREATED, {
+          adminId: adminDetails._id,
+          userId: saved_user._id,
+          userData: saved_user
+        });
       } catch (error) {
         return response.status(500).send({ message: 'Creation of admin failed', error });
       }
@@ -50,10 +69,25 @@ const signUp = async (request, response) => {
         const newCustomer = new Customer({ userId: saved_user._id });
         const customerDetails = await newCustomer.save();
         await User.findByIdAndUpdate(saved_user._id, { role: customerDetails._id });
+        
+        // Publish customer created event safely
+        await publishEventSafely(USER_EVENTS.CUSTOMER_CREATED, {
+          customerId: customerDetails._id,
+          userId: saved_user._id,
+          userData: saved_user
+        });
       } catch (error) {
-        return response.status(500).send({ message: 'Creation of admin failed', error });
+        return response.status(500).send({ message: 'Creation of customer failed', error });
       }
     }
+
+    // Publish user created event safely
+    await publishEventSafely(USER_EVENTS.USER_CREATED, {
+      userId: saved_user._id,
+      userData: saved_user,
+      role
+    });
+
     response
       .status(201)
       .send({ message: 'User created successfully', data: saved_user, token });

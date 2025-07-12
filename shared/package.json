@@ -1,0 +1,10 @@
+{
+  "name": "shared",
+  "version": "1.0.0",
+  "description": "Shared modules for microservices",
+  "type": "module",
+  "dependencies": {
+    "amqplib": "^0.10.8",
+    "axios": "^1.10.0"
+  }
+}

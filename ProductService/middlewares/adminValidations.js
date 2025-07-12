@@ -1,27 +1,24 @@
 import Product from "#models/productModel.js";
-import axios from "axios";
-axios.defaults.baseURL = "http://localhost:8000";
+import Admin from "#models/AdminModel.js"; // Local admin model
 
-const getAdminDetails = async (accountid) => {
-  const { data: adminDetails } = await axios.get("/checkadmin", {
-    data: { accountid },
-  });
-  return adminDetails;
-};
-
+// Local admin validation - no external service calls
 export const checkIfAdmin = async (req, res, next) => {
   const accountid = req.headers.accountid;
   try {
-    const adminDetails = await getAdminDetails(accountid);
+    const admin = await Admin.findOne({ userId: accountid });
 
-    if (adminDetails.isAdmin) {
-      req.adminDetails = adminDetails;
+    if (admin) {
+      req.adminDetails = {
+        isAdmin: true,
+        adminId: admin._id,
+        userId: admin.userId
+      };
       next();
     } else {
-      res.status(401).send({ message: "Unauthorized line 15" });
+      res.status(401).send({ message: "Unauthorized - Not an admin" });
     }
   } catch (error) {
-    res.status(401).send({ message: "Unauthorized line 17" });
+    res.status(401).send({ message: "Unauthorized - Admin validation failed" });
   }
 };
 
@@ -30,20 +27,26 @@ export const checkIfCreatedBySameAdmin = async (req, res, next) => {
   const accountid = req.headers.accountid;
 
   try {
-    const adminDetails = await getAdminDetails(accountid);
+    const admin = await Admin.findOne({ userId: accountid });
     const product = await Product.findById(product_id);
+
     if (!product) {
       return res.status(401).send({ message: "Product not found." });
     } else if (
       product &&
-      adminDetails.isAdmin &&
-      product?.createdBy.toString() === adminDetails.adminId
+      admin &&
+      product?.createdBy.toString() === admin._id.toString()
     ) {
+      req.adminDetails = {
+        isAdmin: true,
+        adminId: admin._id,
+        userId: admin.userId
+      };
       next();
     } else {
       return res
         .status(401)
-        .send({ message: "Unauthorized checkIfCreatedBySameAdmin" });
+        .send({ message: "Unauthorized - Not the product creator" });
     }
   } catch (err) {
     return res
