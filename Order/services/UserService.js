@@ -1,23 +1,55 @@
-import axios from "axios";
+import { request } from "../../shared/serviceRegistry/ServiceDiscovery.js";
 
-const UserService = axios.create({
-  baseURL: "http://localhost:8000",
-});
-UserService.interceptors.request.use(
-  (config) => {
-    return config;
+const UserService = {
+  async get(path, options = {}) {
+    try {
+      return await request('auth-service', {
+        method: 'GET',
+        path: path,
+        headers: options.headers
+      });
+    } catch (error) {
+      throw error;
+    }
   },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-UserService.interceptors.response.use(
-  (response) => {
-    return response.data;
+
+  async post(path, data, options = {}) {
+    try {
+      return await request('auth-service', {
+        method: 'POST',
+        path: path,
+        body: data,
+        headers: options.headers
+      });
+    } catch (error) {
+      throw error;
+    }
   },
-  (error) => {
-    return Promise.reject(error);
+
+  async put(path, data, options = {}) {
+    try {
+      return await request('auth-service', {
+        method: 'PUT',
+        path: path,
+        body: data,
+        headers: options.headers
+      });
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async delete(path, options = {}) {
+    try {
+      return await request('auth-service', {
+        method: 'DELETE',
+        path: path,
+        headers: options.headers
+      });
+    } catch (error) {
+      throw error;
+    }
   }
-);
+};
 
 export default UserService;

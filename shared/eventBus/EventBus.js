@@ -8,19 +8,19 @@ const subscribers = new Map();
 
 const connect = async () => {
   if (isConnected && channel) {
-    console.log('Line 11, EventBus.js, EventBus already connected');
+    console.log('EventBus already connected');
     return;
   }
 
   try {
     const rabbitmqUrl = process.env.RABBITMQ_URL || 'amqp://localhost';
-    console.log('Line 17, EventBus.js, Connecting to RabbitMQ at:', rabbitmqUrl);
+    console.log('Connecting to RabbitMQ at:', rabbitmqUrl);
 
     connection = await amqp.connect(rabbitmqUrl);
     channel = await connection.createChannel();
     isConnected = true;
 
-    console.log('Line 23, EventBus.js, EventBus connected to RabbitMQ');
+    console.log('EventBus connected to RabbitMQ');
 
     // Handle connection errors
     connection.on('error', (error) => {
@@ -29,7 +29,7 @@ const connect = async () => {
     });
 
     connection.on('close', () => {
-      console.log('Line 32, EventBus.js, RabbitMQ connection closed');
+      console.log('RabbitMQ connection closed');
       isConnected = false;
     });
 
@@ -42,7 +42,7 @@ const connect = async () => {
 
 const ensureConnected = async () => {
   if (!isConnected || !channel) {
-    console.log('Line 45, EventBus.js, EventBus not connected, attempting to connect...');
+    console.log('EventBus.js, EventBus not connected, attempting to connect...');
     await connect();
   }
 };

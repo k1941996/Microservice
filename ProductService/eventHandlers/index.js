@@ -10,7 +10,6 @@ const handleAdminCreated = async (event) => {
     
     // Create local admin record
     const admin = new Admin({
-      _id: adminId,
       userId: userId,
       roleType: 'admin',
       permissions: ['all']

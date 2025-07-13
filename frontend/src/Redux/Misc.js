@@ -1,30 +1,68 @@
-import { eCommBaseQuery } from '$apis/EcommApiInterceptor.js';
+import { eCommRTKBaseQuery } from '$apis/EcommApiInterceptor.js';
 import { setUserDetails } from '$redux/Slice/UserSlice.js';
-import { createApi } from '@reduxjs/toolkit/query';
+import { setAccountId, setToken } from '$utils/tokenUtil';
+import { createApi } from '@reduxjs/toolkit/query/react';
 
 export const userAPI = createApi({
-  reducerPath: 'userApi',
-  baseQuery: eCommBaseQuery,
-  endpoints: (builder) => ({
-    createUser: builder.mutation({
+  reducerPath: 'Auth',
+  baseQuery: eCommRTKBaseQuery,
+  endpoints: (build) => ({
+    createUser: build.mutation({
       query: (userDetails) => ({
-        url: '',
-        transformResponse: (response) => response,
+        url: '/signup/admin',
         method: 'POST',
-        data: userDetails,
-        onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
-          try {
-            const { data } = await queryFulfilled;
-            // When the users are fetched, dispatch an action to save them into the custom userDetails slice
-            console.log(data);
-            dispatch(setUserDetails(data));
-          } catch (err) {
-            console.error('Error fetching users:', err);
-          }
-        },
+        body: userDetails, // ✅ RTK Query expects `body`, not `data`
       }),
+      transformResponse: (response) => response,
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          console.log(data);
+          dispatch(setUserDetails(data));
+        } catch (err) {
+          console.error('Error creating user:', err);
+        }
+      },
+    }),
+    login: build.mutation({
+      query: (credentials) => ({
+        url: '/login',
+        method: 'POST',
+        data: credentials,
+      }),
+      transformResponse: (response) => response,
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          const { userData, token } = data;
+          setToken(token);
+          setAccountId(userData._id);
+          dispatch(setUserDetails(userData));
+        } catch (err) {
+          console.error('Error creating user:', err);
+        }
+      },
+    }),
+
+    authorize: build.query({
+      query: () => ({
+        url: '/token',
+        method: 'GET',
+      }),
+      transformResponse: (response) => response,
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          console.log(data.user);
+          dispatch(setUserDetails(data.user));
+        } catch (err) {
+          // console.error('Error authorizing user:', err);
+          setAccountId('');
+          setToken('');
+        }
+      },
     }),
   }),
 });
 
-export const { useCreateUserMutation } = userAPI;
+export const { useCreateUserMutation, useAuthorizeQuery, useLoginMutation } = userAPI;

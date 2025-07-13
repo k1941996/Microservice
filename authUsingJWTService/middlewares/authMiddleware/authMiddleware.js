@@ -11,6 +11,11 @@ const checkUserAuthenticity = async (request, response, next) => {
       const user = (await userModel.findById(accountid)).toObject();
       const userId = user._id.toString();
       if (user.password_id === password_id && userId === accountid) {
+        delete user.password;
+        delete user.password_id;
+        delete user.termsAndConditions;
+        delete user.address;
+        request.user = user;
         next();
       } else {
         response.status(401).send({ message: 'Unauthorized', error: 'Invalid User' });

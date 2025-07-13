@@ -5,8 +5,9 @@ const eComm = axios.create({
 });
 eComm.interceptors.request.use(
   (config) => {
-    config.headers['Authorization'] = getToken();
+    config.headers['Authorization'] = 'Bearer ' + getToken();
     config.headers['accountid'] = getAccountId();
+    config.headers['Content-Type'] = 'application/json';
     return config;
   },
   (error) => {
@@ -15,7 +16,7 @@ eComm.interceptors.request.use(
 );
 eComm.interceptors.response.use(
   (response) => {
-    return response.data;
+    return response;
   },
   (error) => {
     if (error.response) {
@@ -37,7 +38,7 @@ eComm.interceptors.response.use(
 
 export default eComm;
 
-export const eCommBaseQuery = async ({ url, method = 'GET', data, params }) => {
+export const eCommRTKBaseQuery = async ({ url, method = 'GET', data, params }) => {
   try {
     const response = await eComm({
       url,
@@ -45,9 +46,13 @@ export const eCommBaseQuery = async ({ url, method = 'GET', data, params }) => {
       data,
       params,
     });
-    return { data: response.data };
+    return {
+      data: response.data,
+      meta: {
+        status: response.status,
+      },
+    };
   } catch (error) {
-    // RTK Query expects error to be in `{ error: ... }` format
     return { error: error.response ? error.response.data : error.message };
   }
 };

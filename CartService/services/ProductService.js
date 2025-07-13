@@ -1,24 +1,55 @@
-import axios from "axios";
+import { request } from "../../shared/serviceRegistry/ServiceDiscovery.js";
 
-const productService = axios.create({
-  baseURL: "http://localhost:10180/",
-});
+const productService = {
+  async get(path, options = {}) {
+    try {
+      return await request('product-service', {
+        method: 'GET',
+        path: path,
+        headers: options.headers
+      });
+    } catch (error) {
+      throw error;
+    }
+  },
 
-productService.interceptors.request.use(
-  (config) => {
-    return config;
+  async post(path, data, options = {}) {
+    try {
+      return await request('product-service', {
+        method: 'POST',
+        path: path,
+        body: data,
+        headers: options.headers
+      });
+    } catch (error) {
+      throw error;
+    }
   },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-productService.interceptors.response.use(
-  (response) => {
-    return response.data;
+
+  async put(path, data, options = {}) {
+    try {
+      return await request('product-service', {
+        method: 'PUT',
+        path: path,
+        body: data,
+        headers: options.headers
+      });
+    } catch (error) {
+      throw error;
+    }
   },
-  (error) => {
-    return Promise.reject(error);
+
+  async delete(path, options = {}) {
+    try {
+      return await request('product-service', {
+        method: 'DELETE',
+        path: path,
+        headers: options.headers
+      });
+    } catch (error) {
+      throw error;
+    }
   }
-);
+};
 
 export default productService;

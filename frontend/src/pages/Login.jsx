@@ -1,15 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Formik, Form } from 'formik';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
 import FormField from '$inputComponents/FormField';
-import { loginUser } from '$apis/AuthApis.js';
-import { setAccountId, setToken } from '$utils/tokenUtil';
-import { useDispatch } from 'react-redux';
-import { setUserDetails } from '$redux/Slice/UserSlice.js';
+import { useLoginMutation } from '$redux/Misc.js';
+import { useSelector } from 'react-redux';
 
-const initialValues = { userName: '', password: '' };
+const initialValues = { userName: 'admin', password: 'test1234' };
 
 const validationSchema = Yup.object({
   userName: Yup.string().required('Required!'),
@@ -18,24 +16,28 @@ const validationSchema = Yup.object({
 
 const Login = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state) => state.userDetails.isLoggedIn);
 
-  const login = async (loginData) => {
+  const [login] = useLoginMutation();
+  const tryLogin = async (loginData) => {
     try {
-      const res = await loginUser(loginData);
-      setToken(res.token);
-      setAccountId(res.data._id);
-      dispatch(setUserDetails(res));
-      // navigate('/');
+      await login(loginData);
+      navigate('/');
     } catch (err) {
       console.error(err);
     }
   };
 
   const handleSubmit = async (values, { setSubmitting }) => {
-    await login(values);
+    await tryLogin(values);
     setSubmitting(false);
   };
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate('/');
+    }
+  }, [isLoggedIn]);
 
   return (
     <div className="flex flex-1 items-center justify-center mx-4">

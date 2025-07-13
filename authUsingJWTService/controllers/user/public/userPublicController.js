@@ -1,5 +1,4 @@
 import User from '#models/UserModel.js';
-import { Admin, Customer } from '#models/ModelTypes.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { generatePasswordId, generateToken } from '#utils/authUtils.js';
@@ -51,25 +50,17 @@ const signUp = async (request, response) => {
 
     if (role === 'admin') {
       try {
-        const newAdmin = new Admin({ userId: saved_user._id });
-        const adminDetails = await newAdmin.save();
-        await User.findByIdAndUpdate(saved_user._id, { role: adminDetails._id });
-        
         // Publish admin created event safely
         await publishEventSafely(USER_EVENTS.ADMIN_CREATED, {
-          adminId: adminDetails._id,
           userId: saved_user._id,
           userData: saved_user
         });
       } catch (error) {
-        return response.status(500).send({ message: 'Creation of admin failed', error });
+        console.log(error)
+        return response.status(500).json({ message: 'Creation of admin failed' });
       }
     } else {
       try {
-        const newCustomer = new Customer({ userId: saved_user._id });
-        const customerDetails = await newCustomer.save();
-        await User.findByIdAndUpdate(saved_user._id, { role: customerDetails._id });
-        
         // Publish customer created event safely
         await publishEventSafely(USER_EVENTS.CUSTOMER_CREATED, {
           customerId: customerDetails._id,
@@ -113,7 +104,7 @@ const login = async (request, response) => {
       delete user.password_id;
       delete user.termsAndConditions;
       delete user.address;
-      response.status(200).send({ data: user, token });
+      response.status(200).send({ userData: user, token });
     } else {
       response.status(401).send({ message: 'Invalid username or password' });
     }
@@ -171,9 +162,9 @@ const resetPassword = async (request, response) => {
 const checkAdmin = async (request, response) => {
   const accountid = request.body.accountid;
   try {
-    const admin = (await Admin.findOne({ userId: accountid })).toObject();
+    const admin = (await User.findOne({ userId: accountid })).toObject();
 
-    if (admin) {
+    if (admin.role === 'admin') {
       return response
         .status(200)
         .send({ message: 'User is Admin', isAdmin: true, adminId: admin._id });
@@ -186,6 +177,9 @@ const checkAdmin = async (request, response) => {
       .send({ message: 'Something went wrong while checking admin' });
   }
 };
+const getUserDetails = (req, res) => {
+  res.status(200).json({ user: req.user });
+}
 
-const UserPublicController = { signUp, login, forgotPassword, resetPassword, checkAdmin };
+const UserPublicController = { signUp, login, forgotPassword, resetPassword, checkAdmin, getUserDetails };
 export default UserPublicController;

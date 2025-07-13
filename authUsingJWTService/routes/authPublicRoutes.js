@@ -7,6 +7,7 @@ import {
   validateResetPasswordRequest,
 } from '#middlewares/validators/authValidator.js';
 import isRequestValidated from '#middlewares/validators/commonError.js';
+import checkUserAuthenticity from '#middlewares/authMiddleware/authMiddleware.js';
 
 const authPublicRouter = express.Router();
 
@@ -36,5 +37,7 @@ authPublicRouter.post(
   isRequestValidated,
   userPublicController.resetPassword,
 );
+
+authPublicRouter.get('/token',checkUserAuthenticity,userPublicController.getUserDetails)
 
 export default authPublicRouter;

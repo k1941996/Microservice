@@ -1,25 +1,55 @@
-import axios from "axios";
+import { request } from "../../shared/serviceRegistry/ServiceDiscovery.js";
 
-const CartService = axios.create({
-  baseURL: "http://localhost:4000/",
-});
+const CartService = {
+  async get(path, options = {}) {
+    try {
+      return await request('cart-service', {
+        method: 'GET',
+        path: path,
+        headers: options.headers
+      });
+    } catch (error) {
+      throw error;
+    }
+  },
 
-CartService.interceptors.request.use(
-  (config) => {
-    delete config.headers["content-length"];
-    return config;
+  async post(path, data, options = {}) {
+    try {
+      return await request('cart-service', {
+        method: 'POST',
+        path: path,
+        body: data,
+        headers: options.headers
+      });
+    } catch (error) {
+      throw error;
+    }
   },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-CartService.interceptors.response.use(
-  (response) => {
-    return response.data;
+
+  async put(path, data, options = {}) {
+    try {
+      return await request('cart-service', {
+        method: 'PUT',
+        path: path,
+        body: data,
+        headers: options.headers
+      });
+    } catch (error) {
+      throw error;
+    }
   },
-  (error) => {
-    return Promise.reject(error);
+
+  async delete(path, options = {}) {
+    try {
+      return await request('cart-service', {
+        method: 'DELETE',
+        path: path,
+        headers: options.headers
+      });
+    } catch (error) {
+      throw error;
+    }
   }
-);
+};
 
 export default CartService;

@@ -7,9 +7,11 @@ import Signup from '$pages/Signup';
 import Forgotpassword from '$pages/Forgotpassword';
 import ResetPassword from '$pages/Resetpassword';
 import Footer from '$components/Footer.jsx';
+import { getAccountId, getToken } from '$utils/tokenUtil.js';
+import { useEffect } from 'react';
+import { useAuthorizeQuery, userAPI } from '$redux/Misc.js';
 
 const Wrapper = () => {
-  const location = useLocation();
   const isFooterVisible =
     location.pathname === '/login' || location.pathname === '/signup/customer' || location.pathname === '/signup/admin';
   return (

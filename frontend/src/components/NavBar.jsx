@@ -2,47 +2,49 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { logOut } from '$redux/Slice/UserSlice.js';
+import { setAccountId, setToken } from '$utils/tokenUtil';
 
 const NavBar = () => {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.userDetails.isLoggedIn);
   const handleLogout = () => {
+    setToken('');
+    setAccountId('');
     dispatch(logOut());
   };
   return (
     <div className="navbar bg-base-100 flex-wrap gap-2 min-h-fit border-b">
-      <div className="flex-1">
-        <div>
-          <div className="drawer min-[732px]:hidden">
-            {/* <input id="navbar-drawer" type="checkbox" className="drawer-toggle " />
-            <div className="drawer-content px-3">
-              <label htmlFor="navbar-drawer">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" />
-                </svg>
-              </label>
-            </div> 
-            <div className="drawer-side">
-              <label htmlFor="navbar-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
-              <ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4">
-                <li>
-                  <a>Sidebar Item 1</a>
-                </li>
-                <li>
-                  <a>Sidebar Item 2</a>
-                </li>
-              </ul>
-            </div>
-            */}
+      <div>
+        <div className="drawer min-[732px]:hidden ">
+          <input id="navbar-drawer" type="checkbox" className="drawer-toggle " />
+          <div className="drawer-content px-3">
+            <label htmlFor="navbar-drawer">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" />
+              </svg>
+            </label>
+          </div>
+          <div className="drawer-side">
+            <label htmlFor="navbar-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
+            <ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4">
+              <li>
+                <a>Sidebar Item 1</a>
+              </li>
+              <li>
+                <a>Sidebar Item 2</a>
+              </li>
+            </ul>
           </div>
         </div>
-        <Link to={'/'} className="btn btn-ghost text-xl">
+      </div>
+      <div className="flex-1">
+        <Link to={'/'} className=" text-xl">
           E Commerce
         </Link>
       </div>
