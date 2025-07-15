@@ -1,26 +1,15 @@
-import { createBrowserRouter, Outlet, useLocation } from 'react-router-dom';
-import NavBar from '@components/NavBar';
+import { createBrowserRouter } from 'react-router-dom';
 import Login from '@pages/Login';
 import Home from '@pages/Home';
 import Cart from '@pages/Cart';
 import Signup from '@pages/Signup';
 import Forgotpassword from '@pages/Forgotpassword';
 import ResetPassword from '@pages/Resetpassword';
-import Footer from '@components/Footer';
+import Wrapper from './Wrapper';
+import AdminWrapper from './AuthWrapper';
+import ProductList from '@pages/AdminPages/ProductList';
 
-const Wrapper = () => {
-  const isFooterVisible =
-    location.pathname === '/login' || location.pathname === '/signup/customer' || location.pathname === '/signup/admin';
-  return (
-    <div className="flex h-full flex-col">
-      <NavBar />
-      <div className="flex flex-1 basis-full">
-        <Outlet />
-      </div>
-      {isFooterVisible ? null : <Footer />}
-    </div>
-  );
-};
+
 
 const appRoutes = createBrowserRouter([
   {
@@ -54,6 +43,16 @@ const appRoutes = createBrowserRouter([
       {
         path: '/reset/:accountId/:token',
         element: <ResetPassword />,
+      },
+    ],
+  },
+  {
+    path: '/admin',
+    element: <AdminWrapper />,
+    children: [
+      {
+        path: 'products',
+        element: <ProductList />,
       },
     ],
   },

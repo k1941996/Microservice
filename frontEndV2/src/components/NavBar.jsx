@@ -6,7 +6,8 @@ import { setAccountId, setToken } from '@utils/tokenUtil';
 
 const NavBar = () => {
   const dispatch = useDispatch();
-  const isLoggedIn = useSelector((state) => state.userDetails.isLoggedIn);
+  const { isLoggedIn, role } = useSelector((state) => state.userDetails);
+
   const handleLogout = () => {
     setToken('');
     setAccountId('');
@@ -113,8 +114,8 @@ const NavBar = () => {
               <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                 <div className="w-10 rounded-full">
                   <img
-                    alt="Tailwind CSS Navbar component"
                     src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                    alt="Tailwind CSS Navbar component"
                   />
                 </div>
               </div>
@@ -128,6 +129,13 @@ const NavBar = () => {
                     <span className="badge">New</span>
                   </a>
                 </li>
+                {role === 'admin' && (
+                  <li>
+                    <Link to="/admin" className="justify-between">
+                      Admin
+                    </Link>
+                  </li>
+                )}
                 <li>
                   <a>Settings</a>
                 </li>

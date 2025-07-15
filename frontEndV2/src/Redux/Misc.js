@@ -54,7 +54,6 @@ export const userAPI = createApi({
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          console.log(data.user);
           dispatch(setUserDetails(data.user));
         } catch (error) {
           // console.error('Error authorizing user:', err);
