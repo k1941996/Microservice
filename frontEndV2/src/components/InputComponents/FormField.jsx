@@ -1,0 +1,66 @@
+import React, { useState } from 'react';
+import { Field, ErrorMessage } from 'formik';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import PropTypes from 'prop-types';
+
+const FormField = (props) => {
+  const { name, label, type = 'text', placeholder = '' } = props;
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  return (
+    <div className="form-control flex flex-col">
+      <div>
+        <Field name={name} type={type || 'text'}>
+          {({ field, form: { touched, errors } }) => (
+            <>
+              {label ? (
+                <label
+                  htmlFor={name}
+                  className={`text-base font-semibold mb-1 ${touched[name] && errors[name] ? `text-red-500` : ``}`}
+                >
+                  {label}
+                </label>
+              ) : null}
+              <div
+                className={`input input-bordered flex items-center px-2 gap-2 h-11 w-full focus-within:outline-none focus:outline-none focus:outline-0 ${
+                  touched[name] && errors[name]
+                    ? 'border-2 focus-within:border-rose-500 border-rose-500 focus:border-rose-500'
+                    : 'border-gray-300'
+                }`}
+              >
+                <input
+                  {...field}
+                  type={type === 'password' ? (showPassword ? 'text' : 'password') : type}
+                  placeholder={placeholder}
+                  className={`w-full  rounded-md border-transparent focus:border-transparent focus:ring-0`}
+                />
+                {type === 'password' ? (
+                  <div onClick={togglePasswordVisibility}>
+                    {showPassword ? (
+                      <FaEyeSlash fontSize={20} style={{ cursor: 'pointer' }} />
+                    ) : (
+                      <FaEye fontSize={20} style={{ cursor: 'pointer' }} />
+                    )}
+                  </div>
+                ) : null}
+              </div>
+            </>
+          )}
+        </Field>
+      </div>
+      <ErrorMessage name={name} component="div" className="text-red-500 text-sm mt-1" />
+    </div>
+  );
+};
+
+FormField.propTypes = {
+  name: PropTypes.string,
+  label: PropTypes.string,
+  type: PropTypes.string,
+  placeholder: PropTypes.string,
+};
+export default FormField;
