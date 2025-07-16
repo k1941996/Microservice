@@ -11,6 +11,7 @@
     "downlevelIteration": true,
     "baseUrl": ".",
     "paths": {
+      "@shadcn/*": ["src/shadcn/*"],
       "@components/*": ["src/components/*"],
       "@utils/*": ["src/utils/*"],
       "@pages/*": ["src/pages/*"],
@@ -19,8 +20,7 @@
       "@slice/*": ["src/Redux/Slice/*"],
       "@redux/*": ["src/Redux/*"],
       "@api/*": ["src/apis/*"],
-      "@inputComponents/*": ["src/components/InputComponents/*"]
-
+      "@inputComponents/*": ["src/components/InputComponents/*"],
     }
   },
   "exclude": ["node_modules"]

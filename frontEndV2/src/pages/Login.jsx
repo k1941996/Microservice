@@ -6,7 +6,8 @@ import * as Yup from 'yup';
 import FormField from '@inputComponents/FormField';
 import { useLoginMutation } from '@redux/Misc';
 import { useSelector } from 'react-redux';
-import { useToast } from '@components/Toaster/Toaster';
+import { Button } from '@shadcn/components/ui/button';
+import { toast } from 'sonner';
 
 const initialValues = { userName: 'admin', password: 'test1234' };
 
@@ -17,7 +18,6 @@ const validationSchema = Yup.object({
 
 const Login = () => {
   const navigate = useNavigate();
-  const toast = useToast();
   const isLoggedIn = useSelector((state) => state.userDetails.isLoggedIn);
 
   const [login] = useLoginMutation();
@@ -25,8 +25,7 @@ const Login = () => {
   const handleSubmit = async (values, { setSubmitting }) => {
     const res = await login(values);
     if (res?.error) {
-      
-      toast.error(res.error?.message);
+      toast.error(res.error?.message || res.error);
     }
     setSubmitting(false);
   };
@@ -59,9 +58,9 @@ const Login = () => {
                   </p>
 
                   <div className="">
-                    <button type="submit" disabled={isSubmitting} className="btn btn-outline w-full">
+                    <Button type="submit" disabled={isSubmitting} className="btn btn-outline w-full">
                       {isSubmitting ? <span className="loading loading-dots loading-sm"></span> : `Sign in`}
-                    </button>
+                    </Button>
                   </div>
                 </Form>
               )}

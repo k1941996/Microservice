@@ -39,7 +39,6 @@ export const userAPI = createApi({
           setAccountId(userData._id);
           dispatch(setUserDetails(userData));
         } catch (err) {
-          console.error('Error creating user:', err);
           return err;
         }
       },

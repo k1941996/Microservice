@@ -5,7 +5,7 @@ import { setAccountId, setToken } from '@utils/tokenUtil';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import FormField from '@inputComponents/FormField';
 import { signUp } from '@api/AuthApis';
-import { useToast } from '@components/Toaster/Toaster';
+import { toast } from 'sonner';
 
 const validationSchema = Yup.object({
   name: Yup.string().required('Required'),
@@ -23,7 +23,6 @@ const validationSchema = Yup.object({
 const Signup = ({ type }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const toast = useToast();
 
   const initialValues = {
     name: '',
@@ -45,7 +44,7 @@ const Signup = ({ type }) => {
       navigate('/');
     } catch (error) {
       console.log(error);
-      toast.error(error.data.message);
+      toast(error.data.message);
     } finally {
       setSubmitting(false);
     }

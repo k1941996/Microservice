@@ -6,10 +6,9 @@ import Signup from '@pages/Signup';
 import Forgotpassword from '@pages/Forgotpassword';
 import ResetPassword from '@pages/Resetpassword';
 import Wrapper from './Wrapper';
-import AdminWrapper from './AuthWrapper';
+
 import ProductList from '@pages/AdminPages/ProductList';
-
-
+import Dashboard from '@pages/AdminPages/Dashboard';
 
 const appRoutes = createBrowserRouter([
   {
@@ -47,14 +46,12 @@ const appRoutes = createBrowserRouter([
     ],
   },
   {
-    path: '/admin',
-    element: <AdminWrapper />,
-    children: [
-      {
-        path: 'products',
-        element: <ProductList />,
-      },
-    ],
+    path: '/admin/dashboard',
+    element: <Dashboard />,
+  },
+  {
+    path: 'products',
+    element: <ProductList />,
   },
 ]);
 

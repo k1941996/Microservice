@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { Field, ErrorMessage } from 'formik';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import PropTypes from 'prop-types';
+import { Input } from '@shadcn/components/ui/input';
+import { Label } from '@shadcn/components/ui/label';
+
+
 
 const FormField = (props) => {
   const { name, label, type = 'text', placeholder = '' } = props;
@@ -12,47 +16,40 @@ const FormField = (props) => {
   };
 
   return (
-    <div className="form-control flex flex-col">
-      <div>
-        <Field name={name} type={type || 'text'}>
-          {({ field, form: { touched, errors } }) => (
-            <>
-              {label ? (
-                <label
-                  htmlFor={name}
-                  className={`text-base font-semibold mb-1 ${touched[name] && errors[name] ? `text-red-500` : ``}`}
-                >
-                  {label}
-                </label>
-              ) : null}
-              <div
-                className={`input input-bordered flex items-center px-2 gap-2 h-11 w-full focus-within:outline-none focus:outline-none focus:outline-0 ${
-                  touched[name] && errors[name]
-                    ? 'border-2 focus-within:border-rose-500 border-rose-500 focus:border-rose-500'
-                    : 'border-gray-300'
-                }`}
+    <div className="flex flex-col gap-1">
+      <Field name={name} type={type || 'text'}>
+        
+        {({ field, form: { touched, errors } }) => (
+          <>
+            {label && (
+              <Label
+                htmlFor={name}
+                className={`text-sm font-medium ${touched[name] && errors[name] ? 'text-red-500' : ''}`}
               >
-                <input
-                  {...field}
-                  type={type === 'password' ? (showPassword ? 'text' : 'password') : type}
-                  placeholder={placeholder}
-                  className={`w-full  rounded-md border-transparent focus:border-transparent focus:ring-0`}
-                />
-                {type === 'password' ? (
-                  <div onClick={togglePasswordVisibility}>
-                    {showPassword ? (
-                      <FaEyeSlash fontSize={20} style={{ cursor: 'pointer' }} />
-                    ) : (
-                      <FaEye fontSize={20} style={{ cursor: 'pointer' }} />
-                    )}
-                  </div>
-                ) : null}
-              </div>
-            </>
-          )}
-        </Field>
-      </div>
-      <ErrorMessage name={name} component="div" className="text-red-500 text-sm mt-1" />
+                {label}
+              </Label>
+            )}
+            <div className="relative">
+              <Input
+                {...field}
+                id={name}
+                type={type === 'password' ? (showPassword ? 'text' : 'password') : type}
+                placeholder={placeholder}
+                className={`pr-10 ${touched[name] && errors[name] ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+              />
+              {type === 'password' && (
+                <span
+                  onClick={togglePasswordVisibility}
+                  className="text-muted-foreground absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer"
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </span>
+              )}
+            </div>
+          </>
+        )}
+      </Field>
+      <ErrorMessage name={name} component="div" className="text-xs text-red-500" />
     </div>
   );
 };
@@ -63,4 +60,5 @@ FormField.propTypes = {
   type: PropTypes.string,
   placeholder: PropTypes.string,
 };
+
 export default FormField;
