@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
 import FormField from '@inputComponents/FormField';
-import { useLoginMutation } from '@redux/Misc';
+import { useLoginMutation } from '@api/AuthApiWithRTK';
 import { useSelector } from 'react-redux';
 import { Button } from '@shadcn/components/ui/button';
 import { toast } from 'sonner';

@@ -1,4 +1,4 @@
-import { useAuthorizeQuery } from '@redux/Misc';
+import { useAuthorizeQuery } from '@api/AuthApiWithRTK';
 import { RouterProvider } from 'react-router-dom';
 import appRoutes from './routes/routes';
 import './App.css';

@@ -1,6 +1,6 @@
 import userSliceReducer from '@slice/UserSlice';
 import { configureStore } from '@reduxjs/toolkit';
-import { userAPI } from '@redux/Misc';
+import { userAPI } from '@api/AuthApiWithRTK';
 
 const store = configureStore({
   reducer: {

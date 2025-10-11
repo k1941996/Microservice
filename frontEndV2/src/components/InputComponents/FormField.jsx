@@ -5,10 +5,7 @@ import PropTypes from 'prop-types';
 import { Input } from '@shadcn/components/ui/input';
 import { Label } from '@shadcn/components/ui/label';
 
-
-
-const FormField = (props) => {
-  const { name, label, type = 'text', placeholder = '' } = props;
+const FormField = ({ name, label, type = 'text', placeholder = '' }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
@@ -16,15 +13,14 @@ const FormField = (props) => {
   };
 
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1 mb-4">
       <Field name={name} type={type || 'text'}>
-        
         {({ field, form: { touched, errors } }) => (
           <>
             {label && (
               <Label
                 htmlFor={name}
-                className={`text-sm font-medium ${touched[name] && errors[name] ? 'text-red-500' : ''}`}
+                className={`text-sm font-medium capitalize ${touched[name] && errors[name] ? 'text-red-500' : ''}`}
               >
                 {label}
               </Label>

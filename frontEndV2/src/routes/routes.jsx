@@ -9,6 +9,9 @@ import Wrapper from './Wrapper';
 
 import ProductList from '@pages/AdminPages/ProductList';
 import Dashboard from '@pages/AdminPages/Dashboard';
+import { lazy } from 'react';
+// import AdminDashboard from '@pages/AdminPages';
+const AdminDashboard = lazy(()=> import('@pages/AdminPages'))
 
 const appRoutes = createBrowserRouter([
   {
@@ -46,12 +49,18 @@ const appRoutes = createBrowserRouter([
     ],
   },
   {
-    path: '/admin/dashboard',
-    element: <Dashboard />,
-  },
-  {
-    path: 'products',
-    element: <ProductList />,
+    path: '/admin',
+    element: <AdminDashboard />,
+    children: [
+      {
+        path: 'dashboard',
+        element: <Dashboard />,
+      },
+      {
+        path: 'products',
+        element: <ProductList />,
+      },
+    ],
   },
 ]);
 

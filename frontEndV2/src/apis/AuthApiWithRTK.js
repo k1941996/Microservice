@@ -11,7 +11,7 @@ export const userAPI = createApi({
       query: (userDetails) => ({
         url: '/signup/admin',
         method: 'POST',
-        body: userDetails, // ✅ RTK Query expects `body`, not `data`
+        body: userDetails,
       }),
       transformResponse: (response) => response,
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
@@ -55,7 +55,6 @@ export const userAPI = createApi({
           const { data } = await queryFulfilled;
           dispatch(setUserDetails(data.user));
         } catch (error) {
-          // console.error('Error authorizing user:', err);
           setAccountId('');
           setToken('');
         }

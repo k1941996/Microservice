@@ -94,7 +94,7 @@ const NavBar = () => {
                     {role === 'admin' ? (
                       <DropdownMenuItem
                         onClick={() => {
-                          navigate('/admin/dashboard');
+                          navigate('/admin');
                         }}
                       >
                         Admin Dashboard

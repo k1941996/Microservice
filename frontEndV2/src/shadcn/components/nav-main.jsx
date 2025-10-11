@@ -9,6 +9,8 @@ import {
   SidebarMenuItem,
 } from '@shadcn/components/ui/sidebar';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from './ui/dialog';
+import CreateProductDialog from '@components/CreateProduct';
 
 export function NavMain({ items }) {
   const navigate = useNavigate();
@@ -20,17 +22,7 @@ export function NavMain({ items }) {
       <SidebarGroupContent className="flex flex-col gap-2">
         <SidebarMenu>
           <SidebarMenuItem className="flex items-center gap-2">
-            <SidebarMenuButton
-              tooltip="Quick Create"
-              className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
-            >
-              <IconCirclePlusFilled />
-              <span>Create Product</span>
-            </SidebarMenuButton>
-            <Button size="icon" className="size-8 group-data-[collapsible=icon]:opacity-0" variant="outline">
-              <IconMail />
-              <span className="sr-only">Inbox</span>
-            </Button>
+            <CreateProductDialog />
           </SidebarMenuItem>
         </SidebarMenu>
         <SidebarMenu>
@@ -41,7 +33,7 @@ export function NavMain({ items }) {
                 onClick={() => {
                   navigate(item.url);
                 }}
-                className={currentPath === item.url ? 'rounded-2 bg-green-400' : null}
+                className={currentPath === item.url ? 'rounded-2 bg-green-200 dark:bg-secondary' : null}
               >
                 {item.icon && <item.icon />}
                 <span>{item.title}</span>

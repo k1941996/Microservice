@@ -19,7 +19,6 @@ const userSlice = createSlice({
   reducers: {
     setUserDetails: (state, action) => {
       const tempState = { ...state };
-      console.log(action.payload);
       const { userImageLink, userRole, _id, name, email, userName, role, createdAt, updatedAt } = action.payload;
       tempState.isLoggedIn = true;
       tempState.userImageLink = userImageLink;

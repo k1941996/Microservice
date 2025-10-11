@@ -42,33 +42,15 @@ export function AppSidebar({ ...props }) {
       avatar: 'https://avatars.githubusercontent.com/u/24502716?v=4',
     },
     navMain: [
-      {
-        title: 'Dashboard',
-        url: '/admin/dashboard',
-        icon: IconDashboard,
-      },
-      {
-        title: 'Products',
-        url: '/admin/products',
-        icon: IconListDetails,
-      },
-      {
-        title: 'Analytics',
-        url: '#',
-        icon: IconChartBar,
-      },
-      {
-        title: 'Projects',
-        url: '#',
-        icon: IconFolder,
-      },
-      {
-        title: 'Team',
-        url: '#',
-        icon: IconUsers,
-      },
+      { title: 'Dashboard', url: '/admin/dashboard', icon: IconDashboard },
+      { title: 'Products', url: '/admin/products', icon: IconListDetails },
+      { title: 'Orders', url: '/admin/orders', icon: IconListDetails },
+
+      { title: 'Analytics', url: '#', icon: IconChartBar },
+      { title: 'Projects', url: '#', icon: IconFolder },
+      { title: 'Team', url: '#', icon: IconUsers },
     ],
-    navClouds: [
+    /* navClouds: [
       {
         title: 'Capture',
         icon: IconCamera,
@@ -149,10 +131,9 @@ export function AppSidebar({ ...props }) {
         url: '#',
         icon: IconFileWord,
       },
-    ],
+    ], */
   };
-  
-  
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -169,8 +150,8 @@ export function AppSidebar({ ...props }) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavDocuments items={data.documents} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        {/* <NavDocuments items={data.documents} />
+        <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
